@@ -1,0 +1,1265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06231D">
+<title>Learning English</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;800&family=Sora:wght@600;700;800&family=Noto+Sans+Myanmar:wght@400;600;700&display=swap">
+<style>
+html{color-scheme:dark}[hidden]{display:none!important}
+
+/* Layout concept: fixed glass sidebar with a 3-level tree (course > unit > lesson) beside a calm reading column.
+   Palette from the supplied gradients: #FFFDEE #E2FBCE #E3EF26 #076653 #0C342C #06231D. */
+:root{
+  --bg:#06231D; --bg2:#0A2D25; --surface:#0C342C; --glass:rgba(12,52,44,.66); --glass-strong:rgba(12,52,44,.92);
+  --line:rgba(226,251,206,.14); --line-strong:rgba(226,251,206,.28);
+  --fg:#FFFDEE; --muted:#A8C6B4; --accent:#E3EF26; --accent-ink:#06231D; --brand:#E3EF26; --mid:#076653; --soft:#E2FBCE;
+  --good:#5EE6A0; --warn:#F3D250; --info:#86B8FF; --bad:#FF908A; --violet:#BBA8FF; --teal:#4FE0D2; --grey:#C9D1CB;
+  --shadow:0 18px 50px rgba(0,0,0,.35); --focus:#E3EF26;
+  --f-display:'Sora','Noto Sans Myanmar',system-ui,sans-serif;
+  --f-body:'Nunito Sans','Noto Sans Myanmar',system-ui,sans-serif;
+  --f-my:'Noto Sans Myanmar','Myanmar Text','Padauk',sans-serif;
+  --t-xs:.78rem; --t-sm:.9rem; --t-base:1rem; --t-md:1.14rem; --t-lg:1.5rem; --t-xl:2.05rem; --t-2xl:clamp(2.1rem,5.2vw,3.3rem);
+  --r-sm:10px; --r-md:16px; --r-lg:24px; --side:304px; --top:64px;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#FFFDEE; --bg2:#F1F8DA; --surface:#FFFFFF; --glass:rgba(255,255,255,.72); --glass-strong:rgba(255,255,255,.96);
+  --line:rgba(12,52,44,.13); --line-strong:rgba(12,52,44,.3); --fg:#0C342C; --muted:#4D6D61; --brand:#076653;
+  --good:#0B8A55; --warn:#8A6A00; --info:#1C5FC4; --bad:#B3261E; --violet:#5B3FC9; --teal:#00796F; --grey:#4B5651;
+  --shadow:0 14px 40px rgba(12,52,44,.14); --focus:#076653; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#FFFDEE; --bg2:#F1F8DA; --surface:#FFFFFF; --glass:rgba(255,255,255,.72); --glass-strong:rgba(255,255,255,.96);
+  --line:rgba(12,52,44,.13); --line-strong:rgba(12,52,44,.3); --fg:#0C342C; --muted:#4D6D61; --brand:#076653;
+  --good:#0B8A55; --warn:#8A6A00; --info:#1C5FC4; --bad:#B3261E; --violet:#5B3FC9; --teal:#00796F; --grey:#4B5651;
+  --shadow:0 14px 40px rgba(12,52,44,.14); --focus:#076653; color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark}
+
+*{box-sizing:border-box}
+html{font-size:17px;scroll-behavior:smooth}
+html[data-size="s"]{font-size:15px}
+html[data-size="l"]{font-size:19.5px}
+body{margin:0;padding-block:0;padding-left:0;padding-right:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:var(--t-base);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+:lang(my){font-family:var(--f-my);line-height:1.95;letter-spacing:0}
+h1,h2,h3,h4{font-family:var(--f-display);line-height:1.25;margin:0;text-wrap:balance;font-weight:700}
+h1:lang(my),h2:lang(my),h3:lang(my){line-height:1.7}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+svg.i{width:1.15em;height:1.15em;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+body.no-tr .tr{display:none!important}
+
+/* ambient background */
+.ambient{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(900px 500px at 85% -10%,rgba(7,102,83,.55),transparent 70%),
+  radial-gradient(700px 500px at -10% 110%,rgba(227,239,38,.07),transparent 70%),var(--bg)}
+:root[data-theme="light"] .ambient{background:radial-gradient(900px 500px at 90% -10%,rgba(226,251,206,.9),transparent 70%),radial-gradient(600px 400px at 0 100%,rgba(227,239,38,.18),transparent 70%),var(--bg)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .ambient{background:radial-gradient(900px 500px at 90% -10%,rgba(226,251,206,.9),transparent 70%),radial-gradient(600px 400px at 0 100%,rgba(227,239,38,.18),transparent 70%),var(--bg)}}
+
+/* ============ shell ============ */
+.shell{position:relative;z-index:1;display:flex;min-height:100vh}
+.side{position:fixed;inset:0 auto 0 0;width:var(--side);z-index:40;display:flex;flex-direction:column;
+  background:var(--glass-strong);border-right:1px solid var(--line);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  transform:translateX(0);transition:transform .38s cubic-bezier(.22,1,.36,1);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.stage{flex:1;min-width:0;margin-left:var(--side);transition:margin-left .38s cubic-bezier(.22,1,.36,1)}
+body.side-closed .side{transform:translateX(-102%)}
+body.side-closed .stage{margin-left:0}
+.scrim{position:fixed;inset:0;z-index:35;background:rgba(2,12,9,.6);opacity:0;pointer-events:none;transition:opacity .3s}
+@media (max-width:900px){
+  .stage{margin-left:0!important}
+  .side{width:min(86vw,330px);transform:translateX(-102%);box-shadow:var(--shadow)}
+  body.side-open .side{transform:translateX(0)}
+  body.side-open .scrim{opacity:1;pointer-events:auto}
+  body.side-closed .side{transform:translateX(-102%)}
+}
+.brand{display:flex;align-items:center;gap:.8rem;padding:1.1rem 1.1rem .9rem;text-decoration:none}
+.brand svg{width:46px;height:46px;flex:none;filter:drop-shadow(0 4px 14px rgba(227,239,38,.35))}
+.brand b{display:block;font-family:var(--f-display);font-size:1.08rem;letter-spacing:.01em}
+.brand small{display:block;color:var(--muted);font-size:var(--t-xs)}
+.side-scroll{flex:1;overflow-y:auto;padding:.2rem .8rem 1rem;scrollbar-width:thin}
+.label{font-size:var(--t-xs);text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:1rem .4rem .45rem;font-weight:700}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:999px;background:var(--bg2);border:1px solid var(--line);position:relative}
+.seg button{position:relative;z-index:1;border:0;background:none;padding:.55rem .6rem;border-radius:999px;font-weight:700;font-size:var(--t-sm);transition:color .25s;color:var(--muted)}
+.seg button[aria-pressed="true"]{color:var(--accent-ink)}
+.seg .thumb{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:linear-gradient(135deg,var(--accent),#B9D32A);transition:transform .4s cubic-bezier(.22,1,.36,1);box-shadow:0 4px 14px rgba(227,239,38,.3)}
+.seg[data-v="my"] .thumb{transform:translateX(100%)}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:.8rem;width:100%;padding:.7rem .85rem;border-radius:var(--r-md);background:var(--bg2);border:1px solid var(--line);text-align:left}
+.switch span.t{font-size:var(--t-sm);font-weight:700;line-height:1.35}
+.switch span.t small{display:block;font-weight:500;color:var(--muted);font-size:var(--t-xs)}
+.track{width:46px;height:26px;border-radius:999px;background:var(--line-strong);position:relative;transition:background .3s;flex:none}
+.track::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--fg);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.switch[aria-checked="true"] .track{background:var(--mid)}
+.switch[aria-checked="true"] .track::after{transform:translateX(20px);background:var(--accent)}
+
+/* nav tree */
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a,.nav button.row{display:flex;align-items:center;gap:.6rem;width:100%;text-align:left;text-decoration:none;border:0;background:none;border-radius:12px;padding:.55rem .7rem;transition:background .2s,color .2s}
+.nav a:hover,.nav button.row:hover{background:var(--line)}
+.nav .l1{font-weight:800;font-family:var(--f-display);font-size:var(--t-sm)}
+.nav .l2{font-weight:700;font-size:var(--t-sm);padding-left:.4rem}
+.nav .l3{font-size:var(--t-sm);color:var(--muted);padding-left:.4rem}
+.nav .sub{overflow:hidden;margin-left:1.05rem;padding-left:.55rem;border-left:1px dashed var(--line-strong)}
+.nav .sub[hidden]{display:none}
+.nav .chev{margin-left:auto;transition:transform .3s}
+.nav .open>.row .chev{transform:rotate(90deg)}
+.nav [aria-current="page"]{background:linear-gradient(90deg,rgba(227,239,38,.2),rgba(227,239,38,.04));color:var(--fg);box-shadow:inset 3px 0 0 var(--accent)}
+.nav .dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--line-strong);flex:none}
+.nav .dot.doing{border-color:var(--teal);background:linear-gradient(90deg,var(--teal) 50%,transparent 50%)}
+.nav .dot.done{border-color:var(--good);background:var(--good)}
+.nav .ico{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(227,239,38,.22),rgba(7,102,83,.5));color:var(--accent)}
+:root[data-theme="light"] .nav .ico{color:var(--brand)}
+.side-foot{padding:.8rem 1rem 1rem;border-top:1px solid var(--line);font-size:var(--t-xs);color:var(--muted);display:flex;align-items:center;gap:.7rem}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;flex:1}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--mid),var(--accent));transition:width .8s cubic-bezier(.22,1,.36,1)}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:30;height:calc(var(--top) + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px);display:flex;align-items:center;gap:.7rem;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.ibtn{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--glass);display:grid;place-items:center;flex:none;transition:transform .2s,background .2s,border-color .2s;position:relative;overflow:hidden}
+.ibtn:hover{background:var(--line);border-color:var(--line-strong)}
+.ibtn:active{transform:scale(.94)}
+.ibtn.txt{font-family:var(--f-display);font-weight:700;width:auto;padding:0 .8rem;gap:.4rem;display:inline-flex;align-items:center}
+.crumbs{display:flex;align-items:center;gap:.35rem;min-width:0;flex:1;overflow:hidden;white-space:nowrap;font-size:var(--t-sm);color:var(--muted)}
+.crumbs a,.crumbs span{overflow:hidden;text-overflow:ellipsis;text-decoration:none}
+.crumbs a:hover{color:var(--fg)}
+.crumbs [aria-current]{color:var(--fg);font-weight:700}
+.crumbs .sep{opacity:.5;flex:none}
+.pop{position:absolute;right:max(16px,env(safe-area-inset-right,0px));top:calc(var(--top) + env(safe-area-inset-top,0px) - 4px);width:min(300px,calc(100vw - 32px));padding:1rem;border-radius:var(--r-md);background:var(--glass-strong);border:1px solid var(--line-strong);box-shadow:var(--shadow);backdrop-filter:blur(20px);z-index:50;
+  transform-origin:top right;opacity:0;transform:scale(.92) translateY(-8px);pointer-events:none;transition:opacity .22s,transform .3s cubic-bezier(.34,1.56,.64,1)}
+.pop.open{opacity:1;transform:none;pointer-events:auto}
+.pop h4{font-size:var(--t-sm);margin-bottom:.6rem}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:1rem}
+.opts button{padding:.55rem .3rem;border-radius:10px;border:1px solid var(--line);background:var(--bg2);font-weight:700}
+.opts button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.opts .a1{font-size:.85rem}.opts .a2{font-size:1.05rem}.opts .a3{font-size:1.3rem}
+
+/* ============ content ============ */
+.page{padding-inline:max(16px,env(safe-area-inset-left,0px));padding-block:2rem 5rem;max-width:1040px;margin-inline:auto}
+.page > section{animation:rise .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.stagger>*{animation:rise .5s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--i,0)*55ms)}
+.eyebrow{font-size:var(--t-xs);text-transform:uppercase;letter-spacing:.14em;color:var(--brand);font-weight:800;margin-bottom:.5rem}
+.h1{font-size:var(--t-2xl);margin-bottom:.4rem}
+.h1-tr{font-size:var(--t-md);color:var(--muted);margin-bottom:1.2rem}
+.lede{font-size:var(--t-md);color:var(--muted);max-width:62ch}
+
+/* glass */
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:var(--r-lg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:1.4rem;align-items:stretch;margin-bottom:2rem}
+.hero-main{padding:clamp(1.3rem,3.5vw,2.4rem);position:relative;overflow:hidden;background:linear-gradient(145deg,#076653 0%,#0C342C 55%,#06231D 100%);border:1px solid rgba(227,239,38,.22);border-radius:var(--r-lg);color:#FFFDEE}
+.hero-main::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(227,239,38,.35),transparent 65%)}
+.hero-main .lede{color:#CFE6D6;margin:.8rem 0 1.4rem;position:relative;z-index:1}.hero-main h1{padding-right:clamp(80px,10vw,120px)}
+.hero-main h1{position:relative;z-index:1;color:#FFFDEE}
+.hero-main .eyebrow{color:#E3EF26;position:relative;z-index:1}
+.hero-main .btnrow{position:relative;z-index:1}
+.hero-owl{position:absolute;right:1.2rem;top:1.1rem;width:clamp(72px,9vw,104px);opacity:.95;z-index:1;filter:drop-shadow(0 10px 24px rgba(0,0,0,.4));animation:float 5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px)}}
+.stat{padding:1.3rem;display:flex;flex-direction:column;gap:1rem;justify-content:center}
+.ring{--p:0;width:112px;height:112px;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center;transition:--p 1s;margin-inline:auto}
+.ring div{width:86px;height:86px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.35rem}
+.stat dl{display:grid;grid-template-columns:1fr auto;gap:.3rem .8rem;margin:0;font-size:var(--t-sm)}
+.stat dt{color:var(--muted)}.stat dd{margin:0;font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:760px){.hero{grid-template-columns:1fr}.hero-owl{width:64px}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;padding:.8rem 1.35rem;border-radius:999px;border:0;font-weight:800;font-family:var(--f-display);font-size:var(--t-sm);position:relative;overflow:hidden;transition:transform .2s,box-shadow .25s;text-decoration:none}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#A9C928);color:#06231D;box-shadow:0 8px 24px rgba(227,239,38,.28)}
+.btn.primary:hover{box-shadow:0 10px 32px rgba(227,239,38,.45);transform:translateY(-1px)}
+.btn.ghost{background:transparent;border:1px solid var(--line-strong);color:var(--fg)}
+.hero-main .btn.ghost{color:#FFFDEE}
+.btn.ghost:hover{background:var(--line)}
+.btnrow{display:flex;flex-wrap:wrap;gap:.7rem}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.45);transform:scale(0);animation:rip .6s ease-out forwards;pointer-events:none}
+@keyframes rip{to{transform:scale(4);opacity:0}}
+
+/* pills (glossy status pills) */
+.pill{--c:var(--grey);display:inline-flex;align-items:center;gap:.4rem;padding:.2rem .7rem .2rem .5rem;border-radius:999px;font-size:var(--t-xs);font-weight:800;white-space:nowrap;
+  color:var(--c);background:linear-gradient(135deg,color-mix(in srgb,var(--c) 26%,transparent),color-mix(in srgb,var(--c) 7%,transparent));border:1px solid color-mix(in srgb,var(--c) 65%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.pill i{width:.62rem;height:.62rem;border-radius:50%;background:var(--c);display:block}
+.pill.doing{--c:var(--teal)}.pill.done{--c:var(--good)}.pill.todo{--c:var(--violet)}
+.pill.beg{--c:var(--good)}.pill.int{--c:var(--warn)}.pill.adv{--c:var(--bad)}
+.pill.type{--c:var(--info)}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:1rem}
+.card{display:flex;flex-direction:column;gap:.7rem;padding:1.25rem;text-decoration:none;position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.22,1,.36,1),border-color .25s,box-shadow .3s}
+.card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:var(--shadow)}
+.card h3{font-size:var(--t-md)}
+.card .sub{color:var(--muted);font-size:var(--t-sm)}
+.card .meta{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:auto;padding-top:.4rem;font-size:var(--t-xs);color:var(--muted)}
+.card .ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),#7FB82B);color:#06231D}
+.card .ico svg{width:24px;height:24px}
+.card .go{position:absolute;right:1.1rem;top:1.2rem;opacity:.5;transition:transform .3s,opacity .3s}
+.card:hover .go{transform:translateX(4px);opacity:1;color:var(--accent)}
+.section-h{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin:2.2rem 0 1rem}
+.section-h h2{font-size:var(--t-lg)}
+
+/* 3-level explainer */
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media (max-width:700px){.levels{grid-template-columns:1fr}}
+.lv{padding:1.1rem 1.2rem;display:flex;gap:.9rem;align-items:flex-start}
+.lv b.n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-family:var(--f-display);flex:none}
+.lv h3{font-size:var(--t-base);margin-bottom:.15rem}.lv p{font-size:var(--t-sm);color:var(--muted)}
+
+/* lesson rows */
+.rows{display:flex;flex-direction:column;gap:.7rem}
+.lrow{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;text-decoration:none;transition:transform .25s,border-color .25s,background .25s}
+.lrow:hover{transform:translateX(4px);border-color:var(--accent);background:var(--glass-strong)}
+.lrow .no{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;background:var(--bg2);border:1px solid var(--line);flex:none;font-variant-numeric:tabular-nums}
+.lrow .tx{flex:1;min-width:0}.lrow .tx h3{font-size:var(--t-base)}
+.lrow .tx p{font-size:var(--t-sm);color:var(--muted)}
+.lrow .end{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:560px){.lrow{flex-wrap:wrap}.lrow .end{width:100%;justify-content:flex-start;padding-left:58px}}
+
+/* lesson */
+.lhead{margin-bottom:1.6rem}
+.lhead .tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.9rem}
+.block{padding:1.2rem 1.35rem;margin-bottom:1rem}
+.block h3{font-size:var(--t-md);margin-bottom:.8rem;display:flex;align-items:center;gap:.6rem}
+.point{display:flex;gap:.9rem;padding:1rem 1.2rem;margin-bottom:.8rem;align-items:flex-start}
+.point .k{width:30px;height:30px;border-radius:9px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:800;font-size:var(--t-sm);flex:none;font-family:var(--f-display)}
+.point .main{font-size:var(--t-md);line-height:1.6;max-width:68ch}
+.point .main:lang(my){line-height:1.95}
+.tr{color:var(--muted);font-size:var(--t-sm);margin-top:.35rem;line-height:1.75;max-width:68ch}
+.tablewrap{overflow-x:auto;border-radius:var(--r-md);border:1px solid var(--line);background:var(--glass)}
+table{width:100%;border-collapse:collapse;font-size:var(--t-sm)}
+th,td{padding:.7rem 1rem;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-display);font-size:var(--t-xs);text-transform:uppercase;letter-spacing:.08em;color:var(--brand);background:rgba(7,102,83,.22);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700}
+td.tr{margin:0;max-width:none;font-size:var(--t-sm);color:var(--muted)}
+th.tr{margin:0;max-width:none;font-size:var(--t-xs);color:var(--brand);line-height:inherit}
+.ex{display:flex;gap:.8rem;align-items:flex-start;padding:.85rem 0;border-bottom:1px dashed var(--line)}
+.ex:last-child{border-bottom:0}
+.ex .main{font-size:var(--t-md);flex:1;min-width:0}
+.ex .tr{margin-top:.15rem}
+.spk{width:38px;height:38px;border-radius:50%;border:1px solid var(--line-strong);background:var(--bg2);display:grid;place-items:center;flex:none;transition:transform .2s,background .2s;color:var(--brand)}
+.spk:hover{background:var(--accent);color:var(--accent-ink);transform:scale(1.08)}
+.spk.on{background:var(--accent);color:var(--accent-ink);animation:pulse .8s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(227,239,38,.2)}}
+
+/* vocab */
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr));gap:1rem}
+.word{padding:1.15rem 1.2rem;display:flex;flex-direction:column;gap:.45rem;transition:transform .25s,border-color .25s}
+.word:hover{border-color:var(--line-strong);transform:translateY(-3px)}
+.word .top{display:flex;align-items:center;gap:.6rem}
+.word h3{font-size:var(--t-lg);flex:1;letter-spacing:-.01em}
+.word .pos{font-size:var(--t-xs);color:var(--muted);font-style:italic}
+.word .mm{font-size:var(--t-md);color:var(--brand);font-weight:700;margin:0}
+.word .def{font-size:var(--t-sm)}
+.word .eg{font-size:var(--t-sm);border-left:3px solid var(--accent);padding-left:.8rem;margin-top:.3rem}
+.word .eg .tr{margin-top:.1rem}
+
+/* sentences */
+.sent{display:flex;gap:.9rem;align-items:flex-start;padding:1rem 1.2rem;margin-bottom:.7rem}
+.sent .no{font-family:var(--f-display);font-weight:800;color:var(--brand);min-width:1.6rem;font-variant-numeric:tabular-nums}
+.sent .main{font-size:var(--t-md);flex:1;min-width:0}
+.peek{border:1px dashed var(--line-strong);background:none;border-radius:999px;padding:.2rem .8rem;font-size:var(--t-xs);color:var(--muted);margin-top:.4rem}
+body:not(.no-tr) .peek{display:none}
+.peek[aria-expanded="true"]{display:none}
+
+/* scramble */
+.scr{padding:1.2rem 1.35rem;margin-bottom:1rem}
+.scr .tgt{min-height:3.6rem;display:flex;flex-wrap:wrap;gap:.5rem;padding:.8rem;border-radius:var(--r-md);border:2px dashed var(--line-strong);margin:.7rem 0;align-content:flex-start;transition:border-color .25s,background .25s}
+.scr .tgt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 12%,transparent)}
+.scr .tgt.bad{border-color:var(--bad);animation:shake .4s}
+.scr .bank{display:flex;flex-wrap:wrap;gap:.5rem;min-height:2.6rem}
+.tok{padding:.45rem .9rem;border-radius:999px;border:1px solid var(--line-strong);background:var(--bg2);font-weight:700;font-size:var(--t-sm);transition:transform .2s,background .2s;animation:pop .3s cubic-bezier(.34,1.56,.64,1)}
+.tok:hover{background:var(--accent);color:var(--accent-ink);transform:translateY(-2px)}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+/* letters */
+.groups{display:flex;flex-direction:column;gap:1rem}
+.lgroup h4{font-size:var(--t-sm);color:var(--brand);margin-bottom:.5rem}
+.tiles{display:flex;flex-wrap:wrap;gap:.6rem}
+.tile{width:72px;height:72px;border-radius:18px;border:1px solid var(--line-strong);background:var(--glass);font-family:var(--f-my);font-size:2rem;display:grid;place-items:center;line-height:1;transition:transform .25s cubic-bezier(.34,1.56,.64,1),background .2s}
+.tile:hover{transform:translateY(-4px) rotate(-3deg);background:var(--bg2)}
+.tile[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);transform:scale(1.08)}
+.detail{position:sticky;top:calc(var(--top) + 8px);z-index:5;display:flex;align-items:center;gap:1.2rem;padding:1rem 1.3rem;margin-bottom:1.2rem;background:var(--glass-strong)}
+.detail .big{font-family:var(--f-my);font-size:3.6rem;line-height:1.2;width:84px;text-align:center;color:var(--brand);flex:none}
+.detail b{font-family:var(--f-display);font-size:var(--t-lg)}
+.detail p{color:var(--muted);font-size:var(--t-sm)}
+
+/* quiz */
+.quiz{margin-top:2rem}
+.quiz>h2{font-size:var(--t-lg);margin-bottom:1rem;display:flex;align-items:center;gap:.7rem}
+.q{padding:1.2rem 1.35rem;margin-bottom:.9rem}
+.q .qt{font-size:var(--t-md);font-weight:700;margin-bottom:.9rem;display:flex;gap:.7rem}
+.q .qt .n{color:var(--brand);font-family:var(--f-display)}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:.6rem}
+.choice{text-align:left;padding:.75rem 1rem;border-radius:var(--r-md);border:1px solid var(--line-strong);background:var(--bg2);font-size:var(--t-base);transition:transform .2s,border-color .2s,background .2s;position:relative;overflow:hidden}
+.choice:hover:not(:disabled){border-color:var(--accent);transform:translateY(-2px)}
+.choice:disabled{cursor:default}
+.choice.right{border-color:var(--good);background:color-mix(in srgb,var(--good) 18%,transparent);animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+.choice.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 16%,transparent);animation:shake .4s}
+.why{margin-top:.8rem;padding:.7rem .9rem;border-radius:var(--r-sm);background:var(--bg2);font-size:var(--t-sm);animation:rise .3s both}
+.score{padding:1.3rem 1.4rem;display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;animation:rise .5s both;border-color:var(--accent)}
+.score b{font-family:var(--f-display);font-size:var(--t-xl)}
+.pager{display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-top:2.4rem;padding-top:1.4rem;border-top:1px solid var(--line)}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;z-index:90;padding:.8rem 1.3rem;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-weight:800;font-family:var(--f-display);font-size:var(--t-sm);box-shadow:var(--shadow);transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .25s;pointer-events:none;max-width:calc(100vw - 32px)}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+/* welcome overlay */
+.welcome{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:16px;overflow:hidden;
+  background:linear-gradient(180deg,#0f4a3d 0%,#2a7a52 38%,#b7c94a 62%,#E3EF26 100%);transition:opacity .6s,visibility .6s}
+.welcome::before,.welcome::after{content:"";position:absolute;left:-10%;right:-10%;border-radius:50% 50% 0 0/100% 100% 0 0}
+.welcome::before{bottom:-12vh;height:46vh;background:linear-gradient(180deg,#2e8a4f,#076653)}
+.welcome::after{bottom:-22vh;height:44vh;background:linear-gradient(180deg,#076653,#0C342C);left:-30%;right:20%}
+.welcome.out{opacity:0;visibility:hidden}
+.welcome.out .wcard{transform:translateY(-30px) scale(.94)}
+.wcard{position:relative;z-index:2;width:min(400px,100%);padding:2rem 1.7rem 1.6rem;border-radius:28px;color:#FFFDEE;background:linear-gradient(160deg,rgba(255,255,255,.24),rgba(12,52,44,.55));border:1.5px solid rgba(255,255,255,.55);backdrop-filter:blur(22px) saturate(1.2);-webkit-backdrop-filter:blur(22px) saturate(1.2);box-shadow:0 30px 80px rgba(0,0,0,.35);transition:transform .6s cubic-bezier(.22,1,.36,1);animation:rise .8s cubic-bezier(.22,1,.36,1) both}
+.wcard .logo{width:78px;height:78px;margin:0 auto .8rem;display:block;animation:float 4.5s ease-in-out infinite}
+.wcard h1{font-size:1.7rem;text-align:center}
+.wcard p{text-align:center;margin:.4rem 0 1.4rem;color:#FFFDEE;opacity:.92;font-size:var(--t-sm)}
+.wcard label{display:block;font-size:var(--t-sm);font-weight:700;margin-bottom:.4rem}
+.wcard input{width:100%;padding:.85rem 1.1rem;border-radius:16px;border:1.5px solid rgba(255,255,255,.7);background:rgba(255,255,255,.12);color:#FFFDEE;font:inherit;font-size:var(--t-base)}
+.wcard input::placeholder{color:rgba(255,253,238,.7)}
+.wcard input:focus{outline:3px solid #E3EF26;outline-offset:2px}
+.wcard .btn{width:100%;margin-top:1.1rem;padding:.95rem;font-size:var(--t-base);background:linear-gradient(90deg,#B9C922,#1E9F5A);color:#fff}
+.wcard .skip{display:block;width:100%;background:none;border:0;margin-top:.7rem;color:#FFFDEE;opacity:.85;font-size:var(--t-sm);text-decoration:underline}
+.wlang{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:1rem}
+.wlang button{padding:.65rem;border-radius:14px;border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.1);color:#FFFDEE;font-weight:800}
+.wlang button[aria-pressed="true"]{background:#E3EF26;color:#06231D;border-color:#E3EF26}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+@media print{.side,.topbar{display:none}.stage{margin:0}}
+
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="owl" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="31" fill="#0C342C" stroke="#E3EF26" stroke-width="2"/>
+      <path d="M15 27 L18 13 L29 21Z M49 27 L46 13 L35 21Z" fill="#E2FBCE"/>
+      <ellipse cx="32" cy="39" rx="17.5" ry="19" fill="#FFFDEE"/>
+      <path d="M15.5 38 Q11 49 21 56 Q19 47 22 41Z M48.5 38 Q53 49 43 56 Q45 47 42 41Z" fill="#E2FBCE"/>
+      <circle cx="24.5" cy="32" r="8" fill="#076653"/><circle cx="39.5" cy="32" r="8" fill="#076653"/>
+      <circle cx="24.5" cy="32" r="5.2" fill="#FFFDEE"/><circle cx="39.5" cy="32" r="5.2" fill="#FFFDEE"/>
+      <circle cx="25.4" cy="32.6" r="2.7" fill="#06231D"/><circle cx="38.6" cy="32.6" r="2.7" fill="#06231D"/>
+      <circle cx="24.5" cy="32" r="9" fill="none" stroke="#E3EF26" stroke-width="1.6"/><circle cx="39.5" cy="32" r="9" fill="none" stroke="#E3EF26" stroke-width="1.6"/>
+      <path d="M33.5 32 H30.5" stroke="#E3EF26" stroke-width="1.6"/>
+      <path d="M32 37 L28.8 43 H35.2Z" fill="#E3EF26"/>
+      <path d="M25 49 q3 3 7 0 q4 3 7 0 M27 54 q2.5 2.5 5 0 q2.5 2.5 5 0" fill="none" stroke="#076653" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M14 15 L32 8 L50 15 L32 22Z" fill="#06231D" stroke="#E3EF26" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M49 15 V24" stroke="#E3EF26" stroke-width="1.5"/><circle cx="49" cy="25.5" r="1.8" fill="#E3EF26"/>
+    </symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2zM4 19a2 2 0 012-2h13"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15M5 19c3-5 6-8 10-10"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></symbol>
+    <symbol id="i-myanmar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14c0-3 1.5-5 4-5s4 2 4 5M12 9V6"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></symbol>
+    <symbol id="i-text" viewBox="0 0 24 24"><path d="M4 19l6-14 6 14M6.5 14h7M17 10h4M19 10v9"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-q" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 114 2c-1 .8-1.5 1.2-1.5 2.5M12 17h.01"/></symbol>
+  </defs>
+</svg>
+
+<div class="ambient" aria-hidden="true"></div>
+
+<div class="shell">
+  <aside class="side" id="side" aria-label="Course navigation">
+    <a class="brand" href="#home" data-nav-close>
+      <svg aria-hidden="true"><use href="#owl"/></svg>
+      <span><b>Learning English</b><small>ပညာရှိဇီးကွက်နှင့်အတူ လေ့လာမယ်</small></span>
+    </a>
+    <div class="side-scroll">
+      <div class="label">လေ့လာမည့်ဘာသာ · Learn</div>
+      <div class="seg" id="langSeg" data-v="en" role="group" aria-label="Choose language to learn">
+        <span class="thumb"></span>
+        <button type="button" data-lang="en" aria-pressed="true">English</button>
+        <button type="button" data-lang="my" aria-pressed="false">မြန်မာ</button>
+      </div>
+      <div class="label">ဘာသာပြန် · Translation</div>
+      <button type="button" class="switch" id="trSwitch" role="switch" aria-checked="true">
+        <span class="t"><span id="trLabel">Show Burmese translation</span><small id="trHint">မြန်မာဘာသာပြန်ကို ပြမည်</small></span>
+        <span class="track" aria-hidden="true"></span>
+      </button>
+      <div class="label">သင်ခန်းစာများ · Courses</div>
+      <nav class="nav" id="nav" aria-label="Courses, units and lessons"></nav>
+    </div>
+    <div class="side-foot">
+      <span id="footPct">0%</span>
+      <div class="bar"><i id="footBar"></i></div>
+      <span id="footTxt">0 / 0</span>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <div class="stage">
+    <header class="topbar">
+      <button type="button" class="ibtn" id="menuBtn" aria-label="Open or close menu" aria-controls="side" aria-expanded="true"><svg class="i"><use href="#i-menu"/></svg></button>
+      <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
+      <button type="button" class="ibtn txt" id="aaBtn" aria-haspopup="true" aria-expanded="false" aria-label="Reading settings"><svg class="i"><use href="#i-text"/></svg><span>Aa</span></button>
+      <div class="pop" id="aaPop" role="dialog" aria-label="Reading settings">
+        <h4>Text size · စာလုံးအရွယ်</h4>
+        <div class="opts" id="sizeOpts">
+          <button type="button" data-size="s" class="a1" aria-pressed="false">Small</button>
+          <button type="button" data-size="m" class="a2" aria-pressed="true">Medium</button>
+          <button type="button" data-size="l" class="a3" aria-pressed="false">Large</button>
+        </div>
+        <h4>Theme · အရောင်ပုံစံ</h4>
+        <div class="opts" id="themeOpts">
+          <button type="button" data-theme="auto" aria-pressed="true">Auto</button>
+          <button type="button" data-theme="dark" aria-pressed="false">Dark</button>
+          <button type="button" data-theme="light" aria-pressed="false">Light</button>
+        </div>
+        <button type="button" class="btn ghost" id="welcomeBtn" style="width:100%;margin-bottom:.6rem">Show welcome screen · နာမည်ပြောင်းမည်</button>
+        <button type="button" class="btn ghost" id="resetBtn" style="width:100%">Reset my progress</button>
+      </div>
+    </header>
+    <main class="page" id="page" tabindex="-1"></main>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="welcome" id="welcome" role="dialog" aria-modal="true" aria-labelledby="wTitle">
+  <form class="wcard" id="wForm">
+    <svg class="logo" aria-hidden="true"><use href="#owl"/></svg>
+    <h1 id="wTitle">Learning English</h1>
+    <p>ကြိုဆိုပါတယ်။ နာမည်ထည့်ပြီး စတင်လေ့လာပါ။<br>Welcome. Enter your name to begin.</p>
+    <label for="wName">Your name · သင့်နာမည်</label>
+    <input id="wName" name="name" type="text" autocomplete="given-name" placeholder="e.g. Aye Aye" maxlength="24">
+    <div class="wlang" id="wLang" role="group" aria-label="I want to learn">
+      <button type="button" data-lang="en" aria-pressed="true">English</button>
+      <button type="button" data-lang="my" aria-pressed="false">မြန်မာ</button>
+    </div>
+    <button type="submit" class="btn">Start learning</button>
+    <button type="button" class="skip" id="wSkip">Skip for now</button>
+  </form>
+</div>
+<script>
+/* English grammar course. Each text pair is [English, Burmese]. */
+const Q=(q,o,a,w)=>({q,o,a,w});
+window.COURSE_GRAMMAR={id:'grammar',lang:'en',level:'Beginner',icon:'book',
+title:['English Grammar Foundations','အင်္ဂလိပ်သဒ္ဒါ အခြေခံ'],
+desc:['Six units that build a sentence from the ground up: nouns, pronouns, verbs, adjectives, prepositions and questions.','နာမ်၊ နာမ်စား၊ ကြိယာ၊ နာမဝိသေသန၊ ဝိဘတ်နဲ့ မေးခွန်းတွေအထိ ဝါကျတစ်ကြောင်းကို အခြေခံကစပြီး တည်ဆောက်သင်ယူပါ။'],
+units:[
+{id:'g1',title:['Nouns and Articles','နာမ်နှင့် Articles'],lessons:[
+{id:'g1-1',type:'grammar',title:['What is a noun?','နာမ်ဆိုတာ ဘာလဲ'],
+ points:[
+ [['A noun is a word that names a person, a place, a thing or an idea.','နာမ်ဆိုတာ လူ၊ နေရာ၊ ပစ္စည်း သို့မဟုတ် အတွေးအခေါ်ကို ခေါ်တဲ့ စကားလုံးပါ။']],
+ [['A common noun names any one of a group (boy, town). A proper noun names one particular person or place and starts with a capital letter (Tom, Illinois).','Common noun က အုပ်စုတစ်ခုထဲက ဘယ်တစ်ခုကိုမဆို ခေါ်တာ (boy, town)။ Proper noun က သီးသန့်လူ၊ နေရာတစ်ခုကို ခေါ်ပြီး စာလုံးအကြီးနဲ့ စရေးတယ် (Tom, Illinois)။']],
+ [['Abstract nouns name things you cannot touch: courage, memory, silence.','Abstract noun က ကိုင်တွယ်လို့မရတဲ့ အရာတွေကို ခေါ်တယ်: courage, memory, silence။']]],
+ table:{head:['Type','Examples','မြန်မာ'],rows:[['Person','teacher, grandfather','ဆရာ၊ အဖိုး'],['Place','kitchen, library, Chicago','မီးဖိုချောင်၊ စာကြည့်တိုက်၊ ချီကာဂို'],['Thing','bottle, clock, bicycle','ပုလင်း၊ နာရီ၊ စက်ဘီး'],['Idea','courage, silence','သတ္တိ၊ တိတ်ဆိတ်မှု']]},
+ examples:[['The boy opened the window.','ကောင်လေးက ပြတင်းပေါက်ကို ဖွင့်လိုက်တယ်။'],['Grandfather sat on the porch.','အဖိုးက ဝရန်တာမှာ ထိုင်နေတယ်။'],['Her courage surprised everyone.','သူ့ရဲ့ သတ္တိက လူတိုင်းကို အံ့ဩစေခဲ့တယ်။']],
+ quiz:[Q('Which word is a proper noun?',['town','Mandalay','river','teacher'],1,['Names of particular places start with a capital letter.','သီးသန့်နေရာအမည်ကို စာလုံးအကြီးနဲ့ စတယ်။']),Q('Which word is an abstract noun?',['bottle','porch','courage','clock'],2),Q('Pick the noun in: "The clock struck noon."',['struck','The','clock','noon is a verb'],2),Q('"Teacher" is a ... noun.',['proper','common','abstract','plural'],1)]},
+{id:'g1-2',type:'grammar',title:['Singular and plural','တစ်ခုတည်းနှင့် အများကိန်း'],
+ points:[
+ [['Most nouns add -s to make the plural: bottle → bottles.','နာမ်အများစုက -s ထည့်ပြီး အများကိန်းဖြစ်တယ်: bottle → bottles။']],
+ [['Add -es after s, x, ch, sh: box → boxes, watch → watches. After a consonant + y, change y to -ies: story → stories.','s, x, ch, sh နောက်မှာ -es ထည့်တယ်: box → boxes။ ဗျည်း + y ဆိုရင် y ကို -ies ပြောင်းတယ်: story → stories။']],
+ [['Some nouns are irregular and must be learned by heart.','တချို့နာမ်တွေက ပုံမှန်မဟုတ်လို့ အလွတ်ကျက်ရပါမယ်။']]],
+ table:{head:['Singular','Plural','Rule'],rows:[['book','books','+s'],['box','boxes','+es'],['city','cities','y → ies'],['child','children','irregular'],['man','men','irregular'],['foot','feet','irregular'],['sheep','sheep','same form']]},
+ examples:[['Two children ran across the lawn.','ကလေးနှစ်ယောက်က မြက်ခင်းပေါ်ကို ပြေးဖြတ်သွားတယ်။'],['She keeps three boxes in the attic.','သူမက ခေါင်မိုးအောက်ခန်းထဲမှာ သေတ္တာသုံးလုံး သိမ်းထားတယ်။']],
+ quiz:[Q('Plural of "city"?',['citys','cities','cityes','citis'],1),Q('Plural of "foot"?',['foots','feets','feet','foot'],2),Q('Plural of "watch"?',['watchs','watches','watchies','watch'],1),Q('Which is already plural?',['sheep','sheeps','mans','childs'],0,['"Sheep" has the same singular and plural form.','"Sheep" ရဲ့ တစ်ခုတည်းနဲ့ အများကိန်း ပုံစံတူတယ်။'])]},
+{id:'g1-3',type:'grammar',title:['Articles: a, an, the','Articles: a, an, the'],
+ points:[
+ [['Use "a" before a consonant sound and "an" before a vowel sound: a bottle, an attic.','ဗျည်းအသံရှေ့မှာ "a"၊ သရအသံရှေ့မှာ "an" သုံးတယ်: a bottle, an attic။']],
+ [['Sound matters, not spelling: an hour (silent h), a university (starts with "yoo").','စာလုံးပေါင်းထက် အသံက အရေးကြီးတယ်: an hour (h မမြည်), a university ("yoo" နဲ့စ)။']],
+ [['Use "the" when both speaker and listener know which one: Close the door.','နားထောင်သူကလည်း ဘယ်တစ်ခုလဲ သိနေရင် "the" သုံးတယ်: Close the door။']]],
+ table:{head:['Article','Use','Example'],rows:[['a','one, not specific, consonant sound','a lemon'],['an','one, not specific, vowel sound','an apple'],['the','specific, known to both','the lemon on the table']]},
+ examples:[['There is a ravine behind the house.','အိမ်နောက်မှာ ချောက်ကမ်းပါးတစ်ခု ရှိတယ်။'],['He ate an apple under the tree.','သူက သစ်ပင်အောက်မှာ ပန်းသီးတစ်လုံး စားတယ်။']],
+ quiz:[Q('___ umbrella',['a','an','the','—'],1),Q('___ hour',['a','an','—','one'],1),Q('I saw ___ owl. ___ owl was huge. (first mention / second mention)',['an / The','the / An','a / A','an / An'],0),Q('___ university',['an','a','the an','—'],1)]}
+]},
+{id:'g2',title:['Pronouns and the Verb "be"','နာမ်စားနှင့် "be" ကြိယာ'],lessons:[
+{id:'g2-1',type:'grammar',title:['Subject and object pronouns','Subject နှင့် Object နာမ်စား'],
+ points:[
+ [['A pronoun takes the place of a noun so we do not repeat it.','နာမ်စားက နာမ်နေရာမှာ အစားထိုးသုံးတာမို့ နာမ်ကို ထပ်ခါထပ်ခါ မပြောရတော့ဘူး။']],
+ [['Subject pronouns come before the verb: She smiled. Object pronouns come after the verb or a preposition: Tom called her.','Subject pronoun က ကြိယာရှေ့မှာ လာတယ်: She smiled။ Object pronoun က ကြိယာ/ဝိဘတ်နောက်မှာ လာတယ်: Tom called her။']]],
+ table:{head:['Subject','Object','မြန်မာ'],rows:[['I','me','ကျွန်တော်/ကျွန်မ'],['you','you','မင်း/ခင်ဗျား'],['he','him','သူ (ယောက်ျား)'],['she','her','သူမ'],['it','it','၎င်း (အရာဝတ္ထု)'],['we','us','ကျွန်တော်တို့'],['they','them','သူတို့']]},
+ examples:[['We walked home, and they followed us.','ကျွန်တော်တို့ အိမ်ကို လမ်းလျှောက်ပြန်ပြီး သူတို့က ကျွန်တော်တို့ကို လိုက်လာတယ်။'],['Grandma gave him a bottle.','အဖွားက သူ့ကို ပုလင်းတစ်လုံး ပေးတယ်။']],
+ quiz:[Q('Tom called ___ yesterday. (Mary)',['she','her','hers','herself'],1),Q('___ are my best friends. (my friends)',['Them','They','Their','Us'],1),Q('Give the book to ___. (John)',['he','his','him','himself'],2),Q('___ is raining. (weather)',['He','She','It','They'],2)]},
+{id:'g2-2',type:'grammar',title:['Possessives','ပိုင်ဆိုင်မှု စကားလုံးများ'],
+ points:[
+ [['Possessive adjectives go before a noun: my book. Possessive pronouns stand alone: The book is mine.','Possessive adjective က နာမ်ရှေ့မှာ လာတယ်: my book။ Possessive pronoun က တစ်ခုတည်း သုံးနိုင်တယ်: The book is mine။']],
+ [["For nouns add 's: Tom's bicycle. For plural nouns ending in s add only an apostrophe: the boys' room.","နာမ်ဆိုရင် 's ထည့်တယ်: Tom's bicycle။ s နဲ့ဆုံးတဲ့ အများကိန်းဆိုရင် ' ပဲ ထည့်တယ်: the boys' room။"]]],
+ table:{head:['Pronoun','Adjective','Pronoun (alone)'],rows:[['I','my','mine'],['you','your','yours'],['he','his','his'],['she','her','hers'],['we','our','ours'],['they','their','theirs']]},
+ examples:[['This is my grandfather\'s chair.','ဒါက ကျွန်တော့်အဖိုးရဲ့ ထိုင်ခုံပါ။'],['The garden is theirs, not ours.','ဒီဥယျာဉ်က သူတို့ဟာ၊ ကျွန်တော်တို့ဟာ မဟုတ်ဘူး။']],
+ quiz:[Q('That coat is ___. (belongs to me)',['my','mine','me','I'],1),Q('She lost ___ keys.',['her','hers','she','herself'],0),Q('The ___ toys are on the floor. (several children)',["children's","childrens'","childrens","child's"],0),Q('Is this pen ___? (belongs to you)',['your','yours','you','yourself'],1)]},
+{id:'g2-3',type:'grammar',title:['am, is, are, was, were','am, is, are, was, were'],
+ points:[
+ [['"Be" links a subject to a description, a place or an identity.','"Be" က subject ကို ဖော်ပြချက်၊ နေရာ၊ အမည်နဲ့ ချိတ်ဆက်ပေးတယ်။']],
+ [['Present: I am, he/she/it is, you/we/they are. Past: I/he/she/it was, you/we/they were.','ပစ္စုပ္ပန်: I am, he/she/it is, you/we/they are။ အတိတ်: I/he/she/it was, you/we/they were။']],
+ [['Questions swap the order: Is she at home? Negatives add not: She is not (isn\'t) at home.','မေးခွန်းမှာ နေရာလဲတယ်: Is she at home? ငြင်းဆိုရင် not ထည့်တယ်: She is not (isn\'t) at home။']]],
+ table:{head:['Subject','Present','Past'],rows:[['I','am','was'],['he / she / it','is','was'],['you / we / they','are','were']]},
+ examples:[['I am ready.','ကျွန်တော် အဆင်သင့်ပဲ။'],['The lake was calm last night.','မနေ့ညက ရေကန်က တည်ငြိမ်နေတယ်။'],['Are they in the library?','သူတို့ စာကြည့်တိုက်ထဲမှာလား။']],
+ quiz:[Q('She ___ my sister.',['am','is','are','be'],1),Q('We ___ at the park yesterday.',['was','is','were','are'],2),Q('___ you tired?',['Is','Am','Are','Be'],2),Q('It ___ cold this morning.',['were','are','was','am'],2)]}
+]},
+{id:'g3',title:['Verbs and Tenses','ကြိယာနှင့် Tenses'],lessons:[
+{id:'g3-1',type:'grammar',title:['Present simple','Present Simple'],
+ points:[
+ [['Use the present simple for habits, facts and routines.','အလေ့အထ၊ အမှန်တရားနဲ့ နေ့စဉ်လုပ်ရိုးလုပ်စဉ်တွေအတွက် Present Simple သုံးတယ်။']],
+ [['With he, she and it, add -s or -es to the verb: she walks, he watches.','he, she, it နဲ့ဆိုရင် ကြိယာမှာ -s သို့ -es ထည့်တယ်: she walks, he watches။']],
+ [['Frequency words: always, usually, often, sometimes, never.','အကြိမ်ရေပြစကားလုံးတွေ: always, usually, often, sometimes, never။']]],
+ table:{head:['Form','Example'],rows:[['I / you / we / they + verb','They walk to school.'],['he / she / it + verb-s','She walks to school.'],['Negative: do not / does not','He does not walk.'],['Question: Do / Does ... ?','Does she walk?']]},
+ examples:[['Grandpa always sits on the porch after dinner.','အဖိုးက ညစာစားပြီးရင် ဝရန်တာမှာ အမြဲထိုင်တယ်။'],['The sun rises in the east.','နေက အရှေ့ကထွက်တယ်။']],
+ quiz:[Q('He ___ to work by bus.',['go','goes','going','gone'],1),Q('They ___ coffee in the morning.',['drinks','drink','drinking','drank'],1),Q('She ___ like cold milk.',["don't","doesn't","isn't","not"],1),Q('___ your brother play tennis?',['Do','Does','Is','Are'],1)]},
+{id:'g3-2',type:'grammar',title:['Present continuous','Present Continuous'],
+ points:[
+ [['Use it for actions happening now or around now: be + verb-ing.','အခု ဖြစ်နေတဲ့ လုပ်ရပ်တွေအတွက် သုံးတယ်: be + verb-ing။']],
+ [['Spelling: run → running (double the consonant), make → making (drop e).','စာလုံးပေါင်း: run → running (ဗျည်းထပ်), make → making (e ဖြုတ်)။']],
+ [['Do not use it for states like know, like, want: write "I know", not "I am knowing".','know, like, want လို အခြေအနေကြိယာတွေနဲ့ မသုံးဘူး: "I know" လို့ပဲ ရေးပါ။']]],
+ table:{head:['Subject','be','Verb-ing'],rows:[['I','am','reading'],['he / she / it','is','reading'],['we / you / they','are','reading']]},
+ examples:[['The children are running across the lawn.','ကလေးတွေက မြက်ခင်းပေါ်မှာ ပြေးနေကြတယ်။'],['I am writing a letter right now.','ကျွန်တော် အခု စာရေးနေတယ်။']],
+ quiz:[Q('Look! It ___ .',['rain','rains','is raining','rained'],2),Q('She ___ a book now.',['reads','is reading','read','reading'],1),Q('Spelling of "run" + ing?',['runing','running','runeing','runnning'],1),Q('Which is correct?',['I am knowing him.','I know him.','I knowing him.','I am know him.'],1)]},
+{id:'g3-3',type:'grammar',title:['Past simple','Past Simple'],
+ points:[
+ [['Use the past simple for finished actions at a known time.','အတိတ်မှာ ပြီးဆုံးသွားတဲ့ လုပ်ရပ်တွေအတွက် သုံးတယ်။']],
+ [['Regular verbs add -ed: walk → walked. Irregular verbs change form: go → went, see → saw.','ပုံမှန်ကြိယာက -ed ထည့်တယ်: walk → walked။ ပုံမမှန်ကြိယာက ပုံစံပြောင်းတယ်: go → went, see → saw။']],
+ [['Negatives and questions use did + base verb: She did not go. Did she go?','ငြင်းဆိုခြင်းနဲ့ မေးခွန်းမှာ did + ကြိယာမူလပုံစံ သုံးတယ်: She did not go. Did she go?']]],
+ table:{head:['Base','Past','Base','Past'],rows:[['go','went','see','saw'],['eat','ate','take','took'],['come','came','make','made'],['write','wrote','buy','bought']]},
+ examples:[['Last summer we picked grapes with Dad.','ပြီးခဲ့တဲ့နွေရာသီက ကျွန်တော်တို့ ဖေဖေနဲ့အတူ စပျစ်သီးတွေ ခူးခဲ့တယ်။'],['Did you hear the thunder?','မင်း မိုးကြိုးသံ ကြားလား။']],
+ quiz:[Q('Past of "go"?',['goed','went','gone','going'],1),Q('She ___ the letter yesterday.',['write','writes','wrote','written'],2),Q('Did he ___ the door?',['closed','close','closes','closing'],1),Q('They ___ pizza last night.',['eat','eated','ate','eaten'],2)]},
+{id:'g3-4',type:'grammar',title:['Future: will and going to','အနာဂတ်: will နှင့် going to'],
+ points:[
+ [['"Will" is used for quick decisions, promises and predictions: I will help you.','"Will" က ချက်ချင်းဆုံးဖြတ်ချက်၊ ကတိနဲ့ ခန့်မှန်းချက်တွေမှာ သုံးတယ်: I will help you။']],
+ [['"Be going to" is used for plans made before speaking: We are going to visit Grandma.','"Be going to" က စကားမပြောခင် စီစဉ်ထားပြီးသား အစီအစဉ်တွေမှာ သုံးတယ်: We are going to visit Grandma။']],
+ [['After "will" always use the base verb: She will come, not "She will comes".','"will" နောက်မှာ ကြိယာမူလပုံစံ အမြဲသုံးတယ်: She will come။']]],
+ table:{head:['Use','Structure','Example'],rows:[['Decision / promise','will + verb','I will call you.'],['Plan','am/is/are going to + verb','I am going to study.'],['Negative','will not (won\'t)','It won\'t rain.']]},
+ examples:[['It is cloudy. It will probably rain.','မိုးတိမ်ထူနေတယ်။ မိုးရွာဖို့များတယ်။'],['We are going to bake bread tomorrow.','မနက်ဖြန် ကျွန်တော်တို့ ပေါင်မုန့်ဖုတ်မယ်။']],
+ quiz:[Q('I ___ help you with that bag.',['am going','will','going','did'],1),Q('She has tickets. She ___ travel to Paris.',['will','is going to','did','travels'],1),Q('He ___ be late. (negative)',["won't","don't","isn't","not will"],0),Q('Correct sentence:',['She will goes.','She will go.','She wills go.','She will going.'],1)]}
+]},
+{id:'g4',title:['Adjectives and Adverbs','နာမဝိသေသနနှင့် ကြိယာဝိသေသန'],lessons:[
+{id:'g4-1',type:'grammar',title:['Adjectives','Adjectives'],
+ points:[
+ [['An adjective describes a noun. It goes before the noun or after "be": a gentle breeze, The breeze is gentle.','Adjective က နာမ်ကို ဖော်ပြတယ်။ နာမ်ရှေ့မှာ ဒါမှမဟုတ် "be" နောက်မှာ လာတယ်: a gentle breeze။']],
+ [['Adjectives have no plural form: two old men, not "two olds men".','Adjective မှာ အများကိန်းမရှိဘူး: two old men။']],
+ [['Order: opinion, size, age, colour, material, noun: a lovely small old brown wooden chair.','အစီအစဉ်: အမြင်၊ အရွယ်၊ အသက်၊ အရောင်၊ ပစ္စည်း၊ နာမ်။']]],
+ table:{head:['Order','Example'],rows:[['opinion','lovely'],['size','small'],['age','old'],['colour','brown'],['material','wooden'],['noun','chair']]},
+ examples:[['She wore a beautiful red dress.','သူမက လှပတဲ့ အနီရောင်ဝတ်ရုံ ဝတ်ထားတယ်။'],['The old clock was silent.','ဟောင်းနွမ်းတဲ့ နာရီက တိတ်ဆိတ်နေတယ်။']],
+ quiz:[Q('Which sentence is correct?',['a car red big','a big red car','a red big car','car a big red'],1),Q('Pick the adjective: "A cold wind blew."',['wind','cold','blew','A'],1),Q('Two ___ boys',['tall','talls','tallest','taller'],0),Q('The soup is ___ .',['delicious','deliciously','deliciousness','delicate'],0)]},
+{id:'g4-2',type:'grammar',title:['Comparatives and superlatives','နှိုင်းယှဉ်ခြင်း'],
+ points:[
+ [['Short adjectives: add -er and -est: tall → taller → the tallest.','စာလုံးတို adjective: -er, -est ထည့်: tall → taller → the tallest။']],
+ [['Long adjectives: use more and most: beautiful → more beautiful → the most beautiful.','စာလုံးရှည် adjective: more, most သုံး: beautiful → more beautiful → the most beautiful။']],
+ [['Use "than" to compare two things: Mia is taller than Sam.','နှစ်ခု နှိုင်းယှဉ်ရင် "than" သုံးတယ်: Mia is taller than Sam။']]],
+ table:{head:['Adjective','Comparative','Superlative'],rows:[['small','smaller','the smallest'],['big','bigger','the biggest'],['happy','happier','the happiest'],['interesting','more interesting','the most interesting'],['good','better','the best'],['bad','worse','the worst']]},
+ examples:[['Summer is hotter than spring.','နွေရာသီက နွေဦးထက် ပိုပူတယ်။'],['This is the best day of my life.','ဒါက ကျွန်တော့်ဘဝရဲ့ အကောင်းဆုံးနေ့ပဲ။']],
+ quiz:[Q('This box is ___ than that one.',['heavy','heavier','heaviest','more heavy'],1),Q('She is the ___ girl in class.',['smarter','smartest','most smart','smart'],1),Q('Comparative of "good"?',['gooder','better','best','more good'],1),Q('This book is ___ than the film.',['interestinger','more interesting','most interesting','interesting'],1)]},
+{id:'g4-3',type:'grammar',title:['Adverbs','Adverbs'],
+ points:[
+ [['An adverb describes a verb, an adjective or another adverb. Many manner adverbs end in -ly: slow → slowly.','Adverb က ကြိယာ၊ adjective သို့ အခြား adverb ကို ဖော်ပြတယ်။ -ly နဲ့ဆုံးတာ များတယ်: slow → slowly။']],
+ [['Irregular: good → well, fast → fast, hard → hard.','ပုံမမှန်: good → well, fast → fast, hard → hard။']],
+ [['Frequency adverbs go before the main verb but after "be": She always smiles. She is always happy.','Frequency adverb က အဓိကကြိယာရှေ့၊ "be" နောက်မှာ လာတယ်: She always smiles။']]],
+ table:{head:['Adjective','Adverb'],rows:[['quick','quickly'],['quiet','quietly'],['happy','happily'],['good','well'],['fast','fast']]},
+ examples:[['He spoke quietly in the dark.','သူက အမှောင်ထဲမှာ တိုးတိုးပြောတယ်။'],['She never forgets a birthday.','သူမက မွေးနေ့ကို ဘယ်တော့မှ မမေ့ဘူး။']],
+ quiz:[Q('She sings ___ .',['beautiful','beautifully','beauty','beautifuly'],1),Q('He plays tennis very ___ .',['good','well','goodly','best'],1),Q('Where does "always" go? "He ___ is ___ late."',['always is','is always','is late always','always late is'],1),Q('Adverb of "happy"?',['happily','happyly','happy','happier'],0)]}
+]},
+{id:'g5',title:['Prepositions and Conjunctions','ဝိဘတ်နှင့် သမ္ဗန္ဓ'],lessons:[
+{id:'g5-1',type:'grammar',title:['in, on, at','in, on, at'],
+ points:[
+ [['Time: at + clock time (at 6 pm); on + days and dates (on Monday); in + months, seasons, years (in July, in summer).','အချိန်: at + နာရီ၊ on + ရက်/နေ့စွဲ၊ in + လ၊ ရာသီ၊ နှစ်။']],
+ [['Place: at a point (at the door); on a surface (on the table); in an enclosed space (in the room).','နေရာ: at = အမှတ်တစ်ခု၊ on = မျက်နှာပြင်ပေါ်၊ in = အကာအရံထဲ။']]],
+ table:{head:['Word','Time','Place'],rows:[['at','at noon','at the gate'],['on','on Friday','on the wall'],['in','in autumn','in the kitchen']]},
+ examples:[['We meet at 7 o\'clock on Saturday.','ကျွန်တော်တို့ စနေနေ့ ၇ နာရီမှာ တွေ့ကြမယ်။'],['The cat sleeps on the porch in summer.','ကြောင်က နွေရာသီမှာ ဝရန်တာပေါ်မှာ အိပ်တယ်။']],
+ quiz:[Q('The party is ___ Sunday.',['at','on','in','of'],1),Q('I was born ___ July.',['at','on','in','to'],2),Q('Wait for me ___ the bus stop.',['at','on','in','by'],0),Q('There is a clock ___ the wall.',['in','at','on','to'],2)]},
+{id:'g5-2',type:'grammar',title:['and, but, or, because, so','and, but, or, because, so'],
+ points:[
+ [['Conjunctions join words, phrases and clauses.','Conjunction တွေက စကားလုံး၊ စကားစုနဲ့ ဝါကျတွေကို ဆက်ပေးတယ်။']],
+ [['and = addition; but = contrast; or = choice; because = reason; so = result.','and = ထပ်ဆောင်း၊ but = ဆန့်ကျင်၊ or = ရွေးချယ်၊ because = အကြောင်းရင်း၊ so = အကျိုးရလဒ်။']]],
+ table:{head:['Word','Meaning','Example'],rows:[['and','addition','tea and toast'],['but','contrast','small but strong'],['or','choice','now or later'],['because','reason','I stayed in because it rained.'],['so','result','It rained, so I stayed in.']]},
+ examples:[['I wanted to go out, but it was raining.','အပြင်ထွက်ချင်ပေမယ့် မိုးရွာနေတယ်။'],['She smiled because the letter was from Grandma.','အဖွားဆီက စာဖြစ်လို့ သူမ ပြုံးတယ်။']],
+ quiz:[Q('I was tired, ___ I went to bed.',['but','so','because','or'],1),Q('He is rich ___ unhappy.',['so','and','but','because'],2),Q('Do you want tea ___ coffee?',['and','but','or','so'],2),Q('We stayed home ___ it was cold.',['because','so','but','or'],0)]}
+]},
+{id:'g6',title:['Questions and Sentence Patterns','မေးခွန်းနှင့် ဝါကျပုံစံများ'],lessons:[
+{id:'g6-1',type:'grammar',title:['Wh- questions','Wh- မေးခွန်းများ'],
+ points:[
+ [['Question words: who (person), what (thing), where (place), when (time), why (reason), how (manner).','မေးခွန်းစကားလုံး: who (လူ), what (အရာ), where (နေရာ), when (အချိန်), why (အကြောင်းရင်း), how (ပုံစံ)။']],
+ [['Pattern: Wh- word + auxiliary + subject + main verb: Where do you live?','ပုံစံ: Wh- + auxiliary + subject + ကြိယာ: Where do you live?']]],
+ table:{head:['Word','Asks about','Example'],rows:[['who','person','Who is that man?'],['what','thing','What is in the box?'],['where','place','Where did you go?'],['when','time','When does it start?'],['why','reason','Why are you late?'],['how','manner','How do you open it?']]},
+ examples:[['Where do you keep the lemonade?','လီမွန်နိတ်ကို ဘယ်မှာ သိမ်းထားလဲ။'],['Why did the clock stop?','နာရီက ဘာကြောင့် ရပ်သွားတာလဲ။']],
+ quiz:[Q('___ is your birthday? — In May.',['Who','When','Where','What'],1),Q('___ did you buy it? — At the market.',['Where','When','Who','How'],0),Q('___ is she crying? — She is sad.',['Why','Who','Where','Which'],0),Q('Correct order:',['Where you live do?','Where do you live?','Do where you live?','You where live do?'],1)]},
+{id:'g6-2',type:'grammar',title:['Negatives and do / does / did','ငြင်းဆိုခြင်း'],
+ points:[
+ [['To make a negative in the present simple use do not / does not + base verb; in the past use did not + base verb.','Present simple မှာ do not / does not + မူလကြိယာ၊ အတိတ်မှာ did not + မူလကြိယာ သုံးတယ်။']],
+ [['Short forms: don\'t, doesn\'t, didn\'t. The main verb never takes -s or -ed after do/does/did.','အတိုကောက်: don\'t, doesn\'t, didn\'t။ do/does/did နောက်က ကြိယာမှာ -s, -ed မထည့်ရဘူး။']]],
+ table:{head:['Tense','Positive','Negative'],rows:[['Present','She likes tea.','She doesn\'t like tea.'],['Present','They play.','They don\'t play.'],['Past','He called.','He didn\'t call.']]},
+ examples:[['I don\'t know the answer.','ကျွန်တော် အဖြေ မသိဘူး။'],['She didn\'t see the owl.','သူမက ဇီးကွက်ကို မမြင်ခဲ့ဘူး။']],
+ quiz:[Q('She ___ eat meat.',["don't","doesn't","isn't","didn't eats"],1),Q('We ___ go out last night.',["don't","doesn't","didn't","aren't"],2),Q('He didn\'t ___ .',['came','comes','come','coming'],2),Q('They ___ like loud music.',["doesn't","don't","didn't likes","isn't"],1)]},
+{id:'g6-3',type:'grammar',title:['Basic sentence patterns','ဝါကျ အခြေခံပုံစံ'],
+ points:[
+ [['English word order is Subject + Verb + Object (SVO): The boy kicked the ball.','အင်္ဂလိပ် ဝါကျအစီအစဉ်က Subject + Verb + Object (SVO): The boy kicked the ball။']],
+ [['Burmese order is Subject + Object + Verb: ကောင်လေးက ဘောလုံးကို ကန်တယ်။ So the verb comes last in Burmese but in the middle in English.','မြန်မာမှာ ကတ္တား + ကံ + ကြိယာ ဖြစ်တယ်။ ဒါကြောင့် မြန်မာမှာ ကြိယာက အဆုံးမှာလာပေမယ့် အင်္ဂလိပ်မှာ အလယ်မှာ လာတယ်။']],
+ [['Add time and place at the end: The boy kicked the ball in the garden yesterday.','အချိန်နဲ့ နေရာကို အဆုံးမှာ ထည့်တယ်။']]],
+ table:{head:['Subject','Verb','Object','Place / Time'],rows:[['The boy','kicked','the ball','in the garden'],['Grandma','makes','lemonade','every summer'],['We','opened','the window','this morning']]},
+ examples:[['The girl reads a book.','ကောင်မလေးက စာအုပ်တစ်အုပ် ဖတ်တယ်။'],['My father builds a swing in the yard.','ကျွန်တော့်အဖေက ခြံထဲမှာ ဒန်းတစ်ခု လုပ်တယ်။']],
+ quiz:[Q('Choose the correct sentence.',['Reads she a book.','She a book reads.','She reads a book.','A book she reads.'],2),Q('In English the verb usually comes ...',['at the end','after the subject','before the subject','last always'],1),Q('Find the object: "Tom opened the door."',['Tom','opened','the door','—'],2),Q('Which is correct?',['We lemonade drink.','Drink we lemonade.','We drink lemonade.','Lemonade drink we.'],2)]}
+]}
+]};
+
+/* Vocabulary drawn from words found in Ray Bradbury's "Dandelion Wine".
+   Definitions and example sentences are original. Word: [word, pos, မြန်မာ, definition, example, example မြန်မာ] */
+const V=(w,p,m,d,e,em)=>({w,p,m,d,e,em});
+window.COURSE_VOCAB={id:'vocab',lang:'en',level:'Intermediate',icon:'leaf',
+title:['Words from Dandelion Wine','Dandelion Wine ထဲက ဝေါဟာရများ'],
+desc:['Sixty words that appear in the novel, grouped by theme, each with a Burmese meaning, a plain definition and a new example sentence.','ဝတ္ထုထဲမှာ ပါတဲ့ စကားလုံး ၆၀ ကို ခေါင်းစဉ်အလိုက် မြန်မာအဓိပ္ပာယ်၊ အင်္ဂလိပ်အဓိပ္ပာယ်နဲ့ ဥပမာဝါကျသစ်တွေနဲ့ လေ့လာပါ။'],
+units:[
+{id:'v1',title:['Summer and Nature','နွေရာသီနှင့် သဘာဝ'],lessons:[
+{id:'v1-1',type:'vocab',title:['The summer field','နွေရာသီ ကွင်းပြင်'],words:[
+V('ravine','noun','ချောက်ကမ်းပါး၊ ချောင်းကျဉ်း','a deep, narrow valley with steep sides','We crossed the ravine on a wooden bridge.','ကျွန်တော်တို့ သစ်သားတံတားနဲ့ ချောက်ကမ်းပါးကို ဖြတ်ကူးခဲ့တယ်။'),
+V('dandelion','noun','ဒန်းဒီလိုင်း (ပန်းတစ်မျိုး)','a yellow wild flower that turns into a white puff','The lawn was covered with dandelions.','မြက်ခင်းတစ်ခုလုံး ဒန်းဒီလိုင်းပန်းတွေနဲ့ ဖုံးနေတယ်။'),
+V('meadow','noun','မြက်ခင်းပြင်','a field of grass and wild flowers','Cows walked slowly across the meadow.','နွားတွေက မြက်ခင်းပြင်ကို ဖြည်းဖြည်းချင်း လျှောက်သွားတယ်။'),
+V('breeze','noun','လေညင်း','a light, gentle wind','A cool breeze came through the window.','လေညင်းအေးအေးတစ်ချက် ပြတင်းပေါက်ကနေ ဝင်လာတယ်။'),
+V('thunder','noun','မိုးကြိုးသံ၊ မိုးခြိမ်းသံ','the loud sound that follows lightning','The thunder shook the old house.','မိုးခြိမ်းသံက အိမ်ဟောင်းကို တုန်ခါစေတယ်။'),
+V('lightning','noun','လျှပ်စီး','a bright flash of light in the sky during a storm','Lightning lit up the whole sky.','လျှပ်စီးက တစ်ကောင်းကင်လုံးကို လင်းထိန်စေတယ်။')]},
+{id:'v1-2',type:'vocab',title:['Evening and weather','ညနေခင်းနှင့် ရာသီဥတု'],words:[
+V('dew','noun','နှင်းပေါက်','tiny drops of water on grass in the early morning','The grass was wet with dew.','မြက်တွေက နှင်းပေါက်နဲ့ စိုနေတယ်။'),
+V('twilight','noun','ညနေခင်း အလင်းအမှောင်ကြား','the soft light just after the sun goes down','We sat outside in the twilight.','ကျွန်တော်တို့ ညနေခင်း အလင်းအမှောင်ကြားမှာ အပြင်ထွက်ထိုင်ကြတယ်။'),
+V('dusk','noun','မှောင်ရီဆည်းဆာ','the time of day when it is almost dark','The street lamps come on at dusk.','မှောင်ရီဆည်းဆာမှာ လမ်းမီးတွေ ထွန်းတယ်။'),
+V('golden','adjective','ရွှေရောင်','shining yellow, like gold','The golden light made everything warm.','ရွှေရောင်အလင်းက အရာအားလုံးကို နွေးထွေးစေတယ်။'),
+V('fireflies','noun','ပိုးစုန်းကြူးများ','small flying insects whose bodies glow at night','Fireflies blinked above the garden.','ပိုးစုန်းကြူးတွေက ဥယျာဉ်အပေါ်မှာ မှိတ်တုတ်မှိတ်တုတ် လင်းနေတယ်။'),
+V('harvest','noun / verb','စပါး/သီးနှံ ရိတ်သိမ်းခြင်း','the gathering of ripe crops','The farmers harvest the wheat in autumn.','လယ်သမားတွေက ဆောင်းဦးမှာ ဂျုံကို ရိတ်သိမ်းကြတယ်။')]}
+]},
+{id:'v2',title:['Home and Town','အိမ်နှင့် မြို့'],lessons:[
+{id:'v2-1',type:'vocab',title:['Around the house','အိမ်ပတ်ဝန်းကျင်'],words:[
+V('porch','noun','အိမ်ရှေ့ ဝရန်တာ','a covered platform at the entrance of a house','We drank lemonade on the porch.','ကျွန်တော်တို့ ဝရန်တာမှာ လီမွန်နိတ်သောက်ကြတယ်။'),
+V('attic','noun','ခေါင်မိုးအောက်ခန်း','a room under the roof of a house','Old toys were stored in the attic.','အရုပ်ဟောင်းတွေကို ခေါင်မိုးအောက်ခန်းထဲမှာ သိမ်းထားတယ်။'),
+V('cellar','noun','မြေအောက်ခန်း','a room below the ground where things are stored','The wine bottles sleep in the cellar.','ဝိုင်ပုလင်းတွေက မြေအောက်ခန်းထဲမှာ အိပ်နေတယ်။'),
+V('kitchen','noun','မီးဖိုချောင်','the room where food is cooked','Grandma was baking in the kitchen.','အဖွားက မီးဖိုချောင်ထဲမှာ မုန့်ဖုတ်နေတယ်။'),
+V('window','noun','ပြတင်းပေါက်','an opening in a wall that lets in light','She opened the window to let in fresh air.','သူမက လေသန့်ဝင်အောင် ပြတင်းပေါက်ကို ဖွင့်လိုက်တယ်။'),
+V('curtain','noun','လိုက်ကာ','a piece of cloth that covers a window','The curtain moved in the wind.','လိုက်ကာက လေထဲမှာ လှုပ်ရှားနေတယ်။')]},
+{id:'v2-2',type:'vocab',title:['Around the town','မြို့ထဲမှာ'],words:[
+V('library','noun','စာကြည့်တိုက်','a place where books can be read or borrowed','I borrowed three books from the library.','ကျွန်တော် စာကြည့်တိုက်က စာအုပ်သုံးအုပ် ငှားခဲ့တယ်။'),
+V('courthouse','noun','တရားရုံး အဆောက်အအုံ','a building where legal cases are heard','The courthouse clock can be seen from every street.','တရားရုံးအဆောက်အအုံက နာရီကို လမ်းတိုင်းကနေ မြင်ရတယ်။'),
+V('trolley','noun','ထရော်လီ (လျှပ်စစ်ဘတ်စ်ကား)','an electric tram that runs on rails in a town','We rode the trolley to the lake.','ကျွန်တော်တို့ ထရော်လီစီးပြီး ရေကန်ကို သွားခဲ့တယ်။'),
+V('sidewalk','noun','ခြေဘူးလမ်း','a path for people to walk beside a road','Children drew chalk pictures on the sidewalk.','ကလေးတွေက ခြေဘူးလမ်းပေါ်မှာ မြေဖြူနဲ့ ပုံဆွဲကြတယ်။'),
+V('bridge','noun','တံတား','a structure that carries a road or path over water','The bridge over the creek is very old.','ချောင်းကို ဖြတ်တဲ့ တံတားက အရမ်းဟောင်းနေပြီ။'),
+V('sneakers','noun','အားကစားဖိနပ်','soft shoes for running and play','His new sneakers were white as snow.','သူ့ရဲ့ အားကစားဖိနပ်သစ်က နှင်းလိုဖြူတယ်။')]}
+]},
+{id:'v3',title:['Sounds, Light and Senses','အသံ၊ အလင်းနှင့် အာရုံ'],lessons:[
+{id:'v3-1',type:'vocab',title:['Quiet sounds','တိတ်ဆိတ်သော အသံများ'],words:[
+V('whisper','verb / noun','တိုးတိုးပြောသည်','to speak very softly','She leaned close and began to whisper.','သူမက ကပ်ပြီး တိုးတိုးပြောလာတယ်။'),
+V('echo','noun / verb','ပဲ့တင်သံ','a sound that bounces back from a wall or hill','Our voices made an echo in the cellar.','ကျွန်တော်တို့ အသံက မြေအောက်ခန်းမှာ ပဲ့တင်ထပ်တယ်။'),
+V('rustle','verb / noun','တဖြောင်းဖြောင်းမြည်သည်','to make a soft dry sound like leaves','Leaves rustle in the evening wind.','ညနေလေထဲမှာ သစ်ရွက်တွေ ဖြောင်းဖြောင်းမြည်တယ်။'),
+V('chime','verb / noun','ခေါင်းလောင်းသံ','to make a clear ringing sound','The clock will chime at noon.','နာရီက မွန်းတည့်ချိန်မှာ ခေါင်းလောင်းမြည်လိမ့်မယ်။'),
+V('silence','noun','တိတ်ဆိတ်မှု','a complete lack of sound','A long silence followed his question.','သူ့မေးခွန်းနောက်မှာ အချိန်ကြာကြာ တိတ်ဆိတ်သွားတယ်။'),
+V('hush','noun / verb','တိတ်တိတ်နေစေသည်','a sudden quiet; to make someone be quiet','A hush fell over the crowd.','လူအုပ်ကြီး ဝုန်းကနဲ တိတ်သွားတယ်။')]},
+{id:'v3-2',type:'vocab',title:['Light and colour','အလင်းနှင့် အရောင်'],words:[
+V('shadow','noun','အရိပ်','a dark shape made when something blocks light','His shadow grew long in the evening.','ညနေခင်းမှာ သူ့အရိပ်က ရှည်လာတယ်။'),
+V('darkness','noun','အမှောင်','the absence of light','We walked home through the darkness.','ကျွန်တော်တို့ အမှောင်ထဲက အိမ်ပြန်လျှောက်ခဲ့တယ်။'),
+V('moonlight','noun','လရောင်','the light of the moon','The lake shone in the moonlight.','ရေကန်က လရောင်အောက်မှာ တောက်ပနေတယ်။'),
+V('silver','adjective / noun','ငွေရောင်၊ ငွေ','shiny grey-white, like the metal','A silver coin lay on the pavement.','ငွေဒင်္ဂါးတစ်ပြား လမ်းပေါ်မှာ ကျနေတယ်။'),
+V('velvet','noun','ကတ္တီပါ','a soft cloth with a thick smooth surface','The old chair was covered in red velvet.','ထိုင်ခုံဟောင်းကို အနီရောင်ကတ္တီပါနဲ့ ဖုံးထားတယ်။'),
+V('gleaming','adjective','တောက်ပလက်ပနေသော','shining brightly','She polished the gleaming bell.','သူမက တောက်ပလက်ပနေတဲ့ ခေါင်းလောင်းကို တိုက်ချွတ်တယ်။')]}
+]},
+{id:'v4',title:['Feelings and Character','စိတ်ခံစားမှုနှင့် စရိုက်'],lessons:[
+{id:'v4-1',type:'vocab',title:['Inner feelings','စိတ်ထဲက ခံစားချက်'],words:[
+V('lonely','adjective','အထီးကျန်သော','sad because you are alone','He felt lonely after his friend moved away.','သူငယ်ချင်း ပြောင်းသွားတဲ့နောက် သူ အထီးကျန်ခံစားရတယ်။'),
+V('gentle','adjective','နူးညံ့သိမ်မွေ့သော','soft, kind and careful','Grandma has a gentle voice.','အဖွားမှာ နူးညံ့တဲ့ အသံရှိတယ်။'),
+V('delighted','adjective','အလွန်ဝမ်းသာသော','very happy and pleased','They were delighted with the surprise.','သူတို့ အံ့ဩစရာကို အရမ်းဝမ်းသာကြတယ်။'),
+V('grief','noun','ဝမ်းနည်းကြေကွဲမှု','deep sadness, often after a loss','Her grief lasted many months.','သူမရဲ့ ဝမ်းနည်းကြေကွဲမှုက လအတော်ကြာ ခံစားရတယ်။'),
+V('courage','noun','သတ္တိ','the ability to do something frightening','It took courage to speak in front of everyone.','လူတိုင်းရှေ့မှာ ပြောဖို့ သတ္တိလိုတယ်။'),
+V('wonder','noun / verb','အံ့ဩခြင်၊ တွေးတောသည်','a feeling of surprise and admiration; to ask yourself','The children looked at the stars in wonder.','ကလေးတွေက ကြယ်တွေကို အံ့ဩစွာ ကြည့်နေကြတယ်။')]},
+{id:'v4-2',type:'vocab',title:['People and mystery','လူများနှင့် လျှို့ဝှက်ချက်'],words:[
+V('ancient','adjective','ရှေးကျသော','very old, from a long time ago','The ancient clock still keeps good time.','ရှေးကျတဲ့ နာရီက အချိန်အတိအကျ ရှိနေဆဲပဲ။'),
+V('wrinkled','adjective','ရှုံ့မဲ့နေသော','having many small lines or folds','His wrinkled hands held the letter.','သူ့ရဲ့ အရေတွန့်နေတဲ့ လက်တွေက စာကို ကိုင်ထားတယ်။'),
+V('secret','noun / adjective','လျှို့ဝှက်ချက်','something kept hidden from others','The twins shared a secret.','အမွှာတွေက လျှို့ဝှက်ချက်တစ်ခု မျှဝေခဲ့တယ်။'),
+V('mystery','noun','ထူးဆန်းလျှို့ဝှက်ချက်','something strange that is hard to explain','The missing key remained a mystery.','ပျောက်သွားတဲ့ သော့က လျှို့ဝှက်ချက်အဖြစ် ကျန်နေခဲ့တယ်။'),
+V('miracle','noun','အံ့ဖွယ်ရာ','a wonderful event that seems impossible','It was a miracle that nobody was hurt.','ဘယ်သူမှ မဒဏ်ရာရတာ အံ့ဖွယ်ပါပဲ။'),
+V('ghost','noun','သရဲ၊ တစ္ဆေ','the spirit of a dead person that people imagine they see','The children told ghost stories after dark.','ကလေးတွေက မှောင်ပြီးနောက် သရဲပုံပြင်တွေ ပြောကြတယ်။')]}
+]},
+{id:'v5',title:['Actions and Time','လုပ်ရပ်နှင့် အချိန်'],lessons:[
+{id:'v5-1',type:'vocab',title:['Ways of moving and looking','သွားလာပုံနှင့် ကြည့်ပုံ'],words:[
+V('stroll','verb / noun','လမ်းလျှောက်သည်','to walk in a slow, relaxed way','We like to stroll by the river.','ကျွန်တော်တို့ မြစ်ကမ်းဘေး ဖြည်းဖြည်းလျှောက်ရတာ ကြိုက်တယ်။'),
+V('gaze','verb / noun','စူးစိုက်ကြည့်သည်','to look at something for a long time','She gazed at the stars.','သူမက ကြယ်တွေကို စူးစိုက်ကြည့်နေတယ်။'),
+V('stare','verb','အကြာကြီး ငေးကြည့်သည်','to look hard without moving the eyes','It is rude to stare at strangers.','သူစိမ်းတွေကို ငေးကြည့်တာ ယဉ်ကျေးမှုမရှိဘူး။'),
+V('linger','verb','ကြန့်ကြာနေသည်','to stay somewhere a little longer than needed','The smell of bread lingered in the hall.','ပေါင်မုန့်အနံ့က ခန်းမထဲမှာ ကြာကြာ ကျန်နေတယ်။'),
+V('tumble','verb','လိမ့်ကျသည်','to fall down quickly and roughly','The puppy tumbled down the hill.','ခွေးကလေးက တောင်ကုန်းပေါ်က လိမ့်ကျသွားတယ်။'),
+V('glide','verb','ချောမွေ့စွာ လျှောသွားသည်','to move smoothly and easily','Swans glide across the lake.','ငန်းတွေက ရေကန်ပေါ်ကို ချောမွေ့စွာ လျှောသွားတယ်။')]},
+{id:'v5-2',type:'vocab',title:['Time and change','အချိန်နှင့် ပြောင်းလဲမှု'],words:[
+V('drift','verb','လွင့်မျောသည်','to move slowly on water or air','Clouds drift across the sky.','တိမ်တွေက ကောင်းကင်မှာ လွင့်မျောနေတယ်။'),
+V('flutter','verb','တဖျပ်ဖျပ်ခတ်သည်','to move lightly and quickly in the air','A butterfly fluttered past my face.','လိပ်ပြာတစ်ကောင် ကျွန်တော့်မျက်နှာနားက တဖျပ်ဖျပ်ပျံသွားတယ်။'),
+V('tremble','verb','တုန်ရီသည်','to shake because of fear or cold','His hands began to tremble.','သူ့လက်တွေ တုန်လာတယ်။'),
+V('memory','noun','အမှတ်တရ၊ မှတ်ဉာဏ်','something you remember from the past','That summer is my happiest memory.','အဲဒီနွေရာသီက ကျွန်တော့်ရဲ့ အပျော်ဆုံး အမှတ်တရပါ။'),
+V('midnight','noun','သန်းခေါင်ယံ','twelve o\'clock at night','The clock struck midnight.','နာရီက သန်းခေါင်ယံ ရိုက်ခဲ့တယ်။'),
+V('autumn','noun','ဆောင်းဦးရာသီ','the season between summer and winter','Leaves turn red and gold in autumn.','ဆောင်းဦးမှာ သစ်ရွက်တွေ အနီနဲ့ ရွှေရောင်ပြောင်းတယ်။')]}
+]}
+]};
+
+/* Everyday sentences. Items: [English, Burmese] */
+window.COURSE_SENT={id:'sent',lang:'en',level:'Beginner',icon:'chat',
+title:['Everyday English Sentences','နေ့စဉ်သုံး အင်္ဂလိပ်ဝါကျများ'],
+desc:['Forty-eight useful sentences for greetings, home, food and travel. Hide the Burmese, say it aloud, then practise building each sentence.','နှုတ်ဆက်ခြင်း၊ အိမ်၊ အစားအသောက်၊ ခရီးသွားခြင်းအတွက် အသုံးဝင်တဲ့ ဝါကျ ၄၈ ကြောင်း။ မြန်မာပြန်ကို ဖျောက်ပြီး ကိုယ်တိုင်ပြောကြည့်၊ ဝါကျတည်ဆောက်လေ့ကျင့်ပါ။'],
+units:[
+{id:'s1',title:['Greetings and Introductions','နှုတ်ဆက်ခြင်းနှင့် မိတ်ဆက်ခြင်း'],lessons:[
+{id:'s1-1',type:'sent',title:['Saying hello','နှုတ်ဆက်ခြင်း'],items:[
+['Good morning. How are you today?','မင်္ဂလာနံနက်ခင်းပါ။ ဒီနေ့ နေကောင်းလား။'],
+['I am fine, thank you. And you?','နေကောင်းပါတယ်၊ ကျေးဇူးတင်ပါတယ်။ ခင်ဗျားရော။'],
+['Nice to meet you.','တွေ့ရတာ ဝမ်းသာပါတယ်။'],
+['See you tomorrow.','မနက်ဖြန် တွေ့မယ်နော်။'],
+['Have a nice day.','နေ့လည်ခင်း ကောင်းပါစေ။'],
+['Please sit down.','ထိုင်ပါ။']]},
+{id:'s1-2',type:'sent',title:['Introducing yourself','ကိုယ့်ကိုယ်ကို မိတ်ဆက်ခြင်း'],items:[
+['My name is Aye Aye.','ကျွန်မနာမည် အေးအေးပါ။'],
+['I am from Myanmar.','ကျွန်တော် မြန်မာပြည်က လာတာပါ။'],
+['I am a student.','ကျွန်တော် ကျောင်းသားပါ။'],
+['I live in Yangon with my family.','ကျွန်တော် မိသားစုနဲ့အတူ ရန်ကုန်မှာ နေတယ်။'],
+['I am learning English.','ကျွန်တော် အင်္ဂလိပ်စာ သင်နေတယ်။'],
+['What do you do?','ခင်ဗျား ဘာအလုပ်လုပ်လဲ။']]}
+]},
+{id:'s2',title:['Family and Home','မိသားစုနှင့် အိမ်'],lessons:[
+{id:'s2-1',type:'sent',title:['My family','ကျွန်တော့်မိသားစု'],items:[
+['This is my grandfather.','ဒါက ကျွန်တော့်အဖိုးပါ။'],
+['I have two brothers and one sister.','ကျွန်တော့်မှာ အစ်ကိုနှစ်ယောက်နဲ့ ညီမတစ်ယောက် ရှိတယ်။'],
+['My mother cooks very well.','ကျွန်တော့်အမေက ချက်ပြုတ်ရာမှာ ကောင်းတယ်။'],
+['We eat dinner together every night.','ကျွန်တော်တို့ ညတိုင်း ညစာအတူစားတယ်။'],
+['My father works in an office.','အဖေက ရုံးမှာ အလုပ်လုပ်တယ်။'],
+['How many people are in your family?','မင်းမိသားစုမှာ လူဘယ်နှစ်ယောက် ရှိလဲ။']]},
+{id:'s2-2',type:'sent',title:['In the house','အိမ်ထဲမှာ'],items:[
+['Please open the window.','ပြတင်းပေါက်ကို ဖွင့်ပေးပါ။'],
+['The kitchen is next to the living room.','မီးဖိုချောင်က ဧည့်ခန်းဘေးမှာ ရှိတယ်။'],
+['I left my keys on the table.','ကျွန်တော် သော့တွေကို စားပွဲပေါ်မှာ ထားခဲ့တယ်။'],
+['Where is the bathroom?','ရေချိုးခန်း ဘယ်မှာလဲ။'],
+['Turn off the light, please.','မီးပိတ်ပေးပါ။'],
+['Dinner is ready.','ညစာ အဆင်သင့်ပါပြီ။']]}
+]},
+{id:'s3',title:['Food and Shopping','အစားအသောက်နှင့် ဈေးဝယ်ခြင်း'],lessons:[
+{id:'s3-1',type:'sent',title:['At the table','စားပွဲမှာ'],items:[
+['I would like a glass of water, please.','ရေတစ်ခွက်လောက် ပေးပါ။'],
+['The soup is delicious.','ဟင်းရည်က အရသာရှိတယ်။'],
+['I do not eat meat.','ကျွန်တော် အသားမစားဘူး။'],
+['Can I have some more rice?','ထမင်း နည်းနည်း ထပ်ရနိုင်မလား။'],
+['This tea is too hot.','ဒီလက်ဖက်ရည်က ပူလွန်းတယ်။'],
+['Could you pass the salt?','ဆားလေး ကမ်းပေးနိုင်မလား။']]},
+{id:'s3-2',type:'sent',title:['At the market','ဈေးထဲမှာ'],items:[
+['How much is this?','ဒါ ဘယ်လောက်လဲ။'],
+['That is too expensive.','အဲဒါ ဈေးများလွန်းတယ်။'],
+['Do you have a smaller size?','ပိုသေးတဲ့ အရွယ်အစား ရှိလား။'],
+['I will take two kilos of apples.','ပန်းသီး နှစ်ကီလို ယူမယ်။'],
+['Can I pay by card?','ကတ်နဲ့ ပေးလို့ရလား။'],
+['Here is your change.','ဒါ ပြန်အမ်းငွေပါ။']]}
+]},
+{id:'s4',title:['Town and Directions','မြို့နှင့် လမ်းညွှန်ချက်'],lessons:[
+{id:'s4-1',type:'sent',title:['Asking the way','လမ်းမေးခြင်း'],items:[
+['Excuse me, where is the library?','တောင်းပန်ပါတယ်၊ စာကြည့်တိုက် ဘယ်မှာလဲ။'],
+['Go straight and turn left.','တည့်တည့်သွားပြီး ဘယ်ဘက်ကွေ့ပါ။'],
+['It is on your right.','ညာဘက်မှာ ရှိတယ်။'],
+['Is it far from here?','ဒီကနေ ဝေးလား။'],
+['It takes ten minutes on foot.','လမ်းလျှောက်ရင် ဆယ်မိနစ်ကြာတယ်။'],
+['Thank you for your help.','ကူညီတာ ကျေးဇူးတင်ပါတယ်။']]},
+{id:'s4-2',type:'sent',title:['Travelling','ခရီးသွားခြင်း'],items:[
+['What time does the bus leave?','ဘတ်စ်ကား ဘယ်အချိန် ထွက်လဲ။'],
+['One ticket to Mandalay, please.','မန္တလေးသွား လက်မှတ်တစ်စောင် ပေးပါ။'],
+['I am looking for the train station.','ကျွန်တော် ရထားဘူတာကို ရှာနေတယ်။'],
+['The train is ten minutes late.','ရထားက ဆယ်မိနစ်နောက်ကျတယ်။'],
+['Please take me to the airport.','လေဆိပ်ကို ပို့ပေးပါ။'],
+['I have a reservation under the name Ko Ko.','ကိုကို နာမည်နဲ့ ကြိုတင်မှာထားတာ ရှိတယ်။']]}
+]}
+]};
+
+/* Burmese grammar course, following the chapter order of မြန်မာသဒ္ဒါ (Myanmar Grammar, Myanmar Language Commission).
+   Text pairs are [English, Burmese]; in this course Burmese is shown first. */
+const QM=(q,o,a,w)=>({q,o,a,w});
+window.COURSE_MY={id:'my',lang:'my',level:'Beginner',icon:'myanmar',
+title:['Myanmar Grammar','မြန်မာသဒ္ဒါ'],
+desc:['From the 33 consonants to sentence structure: letters, word classes, nouns, verbs, particles and sentences, in the order of the Myanmar Grammar textbook.','ဗျည်း ၃၃ လုံးကစပြီး ဝါကျဖွဲ့စည်းပုံအထိ၊ မြန်မာသဒ္ဒါ သင်ရိုးအစီအစဉ်အတိုင်း အက္ခရာ၊ ပုဒ်အမျိုးအစား၊ နာမ်၊ ကြိယာ၊ ဝိဘတ်နဲ့ ဝါကျတွေကို လေ့လာပါ။'],
+units:[
+{id:'m1',title:['Letters of the Alphabet','အက္ခရာများ'],lessons:[
+{id:'m1-1',type:'letters',title:['The 33 consonants','ဗျည်း ၃၃ လုံး'],
+ intro:[['Myanmar has 33 consonants (ဗျည်း). They are arranged in groups called ဝဂ်, each group named after its first letter. Click a letter to see its sound.','မြန်မာဗျည်း ၃၃ လုံးကို ဝဂ်လို့ခေါ်တဲ့ အုပ်စုတွေနဲ့ စီထားပါတယ်။ အုပ်စုတစ်ခုချင်းကို ပထမစာလုံးနဲ့ အမည်ပေးထားတယ်။ စာလုံးတစ်လုံးကို နှိပ်ပြီး အသံကြည့်ပါ။']],
+ groups:[
+ {n:'ကဝဂ်',l:[['က','ka'],['ခ','kha'],['ဂ','ga'],['ဃ','gha'],['င','nga']]},
+ {n:'စဝဂ်',l:[['စ','sa'],['ဆ','hsa'],['ဇ','za'],['ဈ','zha'],['ဉ','nya']]},
+ {n:'ဋဝဂ်',l:[['ဋ','ta'],['ဌ','hta'],['ဍ','da'],['ဎ','dha'],['ဏ','na']]},
+ {n:'တဝဂ်',l:[['တ','ta'],['ထ','hta'],['ဒ','da'],['ဓ','dha'],['န','na']]},
+ {n:'ပဝဂ်',l:[['ပ','pa'],['ဖ','hpa'],['ဗ','ba'],['ဘ','bha'],['မ','ma']]},
+ {n:'အဝဂ်',l:[['ယ','ya'],['ရ','ya'],['လ','la'],['ဝ','wa'],['သ','tha'],['ဟ','ha'],['ဠ','la'],['အ','a']]}],
+ quiz:[QM('မြန်မာဗျည်း အရေအတွက်က ဘယ်လောက်လဲ။',['၂၅ လုံး','၃၀ လုံး','၃၃ လုံး','၄၀ လုံး'],2,['Myanmar has 33 consonants.','မြန်မာဗျည်း ၃၃ လုံး ရှိတယ်။']),
+  QM('"က" ပါတဲ့ အုပ်စုကို ဘာလို့ခေါ်လဲ။',['စဝဂ်','ကဝဂ်','တဝဂ်','ပဝဂ်'],1),
+  QM('ပဝဂ်ထဲမှာ မပါတာက ဘယ်ဟာလဲ။',['ပ','ဖ','မ','သ'],3),
+  QM('"သ" က ဘယ်အုပ်စုထဲမှာ ပါလဲ။',['တဝဂ်','ပဝဂ်','အဝဂ်','ကဝဂ်'],2)]},
+{id:'m1-2',type:'grammar',title:['Vowels (သရ)','သရများ'],
+ points:[
+ [['Vowels give a consonant its sound. There are independent vowels (အ၊ ဣ၊ ဤ၊ ဥ၊ ဦ၊ ဧ၊ ဩ၊ ဪ) and dependent vowel signs that attach to consonants.','သရက ဗျည်းကို အသံပေးတယ်။ သီးခြားရပ်တည်တဲ့ သရ (အ၊ ဣ၊ ဤ၊ ဥ၊ ဦ၊ ဧ၊ ဩ၊ ဪ) နဲ့ ဗျည်းနဲ့တွဲရတဲ့ သရအမှတ်အသားတွေ ရှိတယ်။']],
+ [['Dependent signs: ါ ာ ိ ီ ု ူ ေ ဲ ံ ့ း. Example: ကာ, ကိ, ကီ, ကု, ကူ, ကေ, ကဲ.','ဗျည်းနဲ့တွဲတဲ့ အမှတ်အသားများ: ါ ာ ိ ီ ု ူ ေ ဲ ံ ့ း။ ဥပမာ - ကာ၊ ကိ၊ ကီ၊ ကု၊ ကူ၊ ကေ၊ ကဲ။']],
+ [['Tone marks: အောက်ကမြင့်သံ (့) is the creaky tone, and ဝစ္စနိဋ္ဌာန် (း) is the high tone.','အသံမြင့်ညွှန်း ( း ) နဲ့ အောက်ကမြင့် ( ့ ) တို့က အသံအနိမ့်အမြင့်ကို ပြတယ်။']]],
+ table:{head:['Sign','With က','Sound'],rows:[['ာ','ကာ','kar'],['ိ','ကိ','ki'],['ီ','ကီ','ki (long)'],['ု','ကု','ku'],['ူ','ကူ','ku (long)'],['ေ','ကေ','kay'],['ဲ','ကဲ','kè']]},
+ examples:[['The word မြန်မာ has the vowel sign ာ.','"မြန်မာ" မှာ ာ သရအမှတ်အသား ပါတယ်။'],['The word ကလေး has the vowel sign ေ and tone mark း.','"ကလေး" မှာ ေ နဲ့ း ပါတယ်။']],
+ quiz:[QM('"ကာ" မှာ ပါတဲ့ သရအမှတ်က ဘာလဲ။',['ိ','ာ','ု','ေ'],1),QM('အောက်ပါတို့အနက် သီးခြားသရ ဘယ်ဟာလဲ။',['က','ာ','အ','း'],2),QM('"ကူ" ရဲ့ သရက ...',['ု','ူ','ီ','ိ'],1),QM('အသံမြင့်ပြတဲ့ အမှတ်က ...',['း','့','်','ံ'],0)]},
+{id:'m1-3',type:'grammar',title:['Medials and killed consonants','ဗျည်းတွဲနှင့် အသတ်'],
+ points:[
+ [['Four medials (ဗျည်းဆိုင်း) attach to a consonant: ျ ြ ွ ှ. Example: ကျ, ကြ, ကွ, ကှ.','ဗျည်းဆိုင်း ၄ ခုက ဗျည်းနဲ့ တွဲပါတယ်: ျ ြ ွ ှ။ ဥပမာ - ကျ၊ ကြ၊ ကွ၊ ကှ။']],
+ [['The sign ် (အသတ်) silences a consonant’s vowel so it closes a syllable: န် in မြန်, င် in သင်.','အသတ် ( ် ) က ဗျည်းရဲ့ သရအသံကို သတ်လိုက်ပြီး ဝဏ္ဏဆုံးစေတယ်: မြန်၊ သင်။']],
+ [['Final consonants are limited: က င စ ည တ န ပ မ ယ ဝ၊ pronounced with a short closing sound.','အသတ်ဖြစ်နိုင်တဲ့ ဗျည်းတွေက: က င စ ည တ န ပ မ ယ ဝ။']]],
+ table:{head:['Medial','Name','Example'],rows:[['ျ','ယပင့်','ကျောင်း'],['ြ','ရရစ်','မြန်မာ'],['ွ','ဝဆွဲ','ကွဲ'],['ှ','ဟထိုး','မှ']]},
+ examples:[['ကျောင်းသား (student) uses the medial ျ.','"ကျောင်းသား" မှာ ယပင့် ( ျ ) ပါတယ်။'],['မြေ (earth) uses the medial ြ.','"မြေ" မှာ ရရစ် ( ြ ) ပါတယ်။']],
+ quiz:[QM('ဗျည်းဆိုင်း စုစုပေါင်း ဘယ်နှခုရှိလဲ။',['၂ ခု','၃ ခု','၄ ခု','၅ ခု'],2),QM('"မြန်မာ" မှာ ပါတဲ့ ဗျည်းဆိုင်းက ...',['ျ','ြ','ွ','ှ'],1),QM('"ကျောင်း" မှာ ပါတဲ့ ဗျည်းဆိုင်းက ...',['ျ','ြ','ွ','ှ'],0),QM('အသတ် အမှတ်အသားက ...',['ံ','း','်','့'],2)]}
+]},
+{id:'m2',title:['Words and Word Classes','စကားလုံးနှင့် ပုဒ်'],lessons:[
+{id:'m2-1',type:'grammar',title:['Syllables and words','ဝဏ္ဏနှင့် စကားလုံး'],
+ points:[
+ [['A syllable (ဝဏ္ဏ) is the smallest unit of sound. One or more syllables form a word (စကားလုံး).','ဝဏ္ဏက အသံအသေးငယ်ဆုံး ယူနစ်ပါ။ ဝဏ္ဏတစ်လုံး သို့ တစ်လုံးထက်ပိုပြီး စကားလုံးတစ်လုံး ဖြစ်တယ်။']],
+ [['A word with one syllable is a monosyllable (တစ်ဝဏ်စကားလုံး): ရေ၊ မီး၊ လူ။ A word with two or more is a polysyllable: ကျောင်းသား၊ ကျောင်းဆရာ။','တစ်ဝဏ်စကားလုံး: ရေ၊ မီး၊ လူ။ နှစ်ဝဏ်နဲ့အထက်: ကျောင်းသား၊ ဆရာမ။']],
+ [['Words are built by combining simple words: ရေ + ခဲ = ရေခဲ (ice).','ရိုးရိုးစကားလုံးတွေ ပေါင်းပြီး ဝေါဟာရသစ်ဖွဲ့နိုင်တယ်: ရေ + ခဲ = ရေခဲ။']]],
+ table:{head:['Type','Burmese','English'],rows:[['One syllable','ရေ','water'],['One syllable','မီး','fire'],['Two syllables','ကလေး','child'],['Compound','ရေခဲ','ice'],['Compound','မီးရထား','train']]},
+ examples:[['The word စာအုပ် has two syllables: စာ + အုပ်.','"စာအုပ်" မှာ ဝဏ္ဏ ၂ လုံး ပါတယ်: စာ + အုပ်။'],['ရေ is a one-syllable word.','"ရေ" က တစ်ဝဏ်စကားလုံးပါ။']],
+ quiz:[QM('"လူ" က ဘာစကားလုံးလဲ။',['တစ်ဝဏ်','နှစ်ဝဏ်','သုံးဝဏ်','ပေါင်းစပ်'],0),QM('"ရေ + ခဲ" ပေါင်းရင် ...',['ရေခဲ','ရေလူ','ခဲရေ','ရေမီး'],0),QM('"စာအုပ်" မှာ ဝဏ်ဘယ်လောက်လဲ။',['၁','၂','၃','၄'],1),QM('စကားလုံးဆိုတာ ...',['အက္ခရာတစ်လုံး','အဓိပ္ပာယ်ရှိတဲ့ အသံအစု','စာကြောင်းတစ်ကြောင်း','ပုဒ်ဖြတ်ကေတ'],1)]},
+{id:'m2-2',type:'grammar',title:['The eight word classes','ပုဒ်အမျိုးအစား ၈ မျိုး'],
+ points:[
+ [['In traditional grammar, words are sorted by job into eight classes (ပုဒ်). Knowing the class tells you where the word can stand in a sentence.','ရိုးရာသဒ္ဒါမှာ စကားလုံးတွေကို လုပ်ငန်းအလိုက် ပုဒ် ၈ မျိုး ခွဲထားတယ်။ ပုဒ်အမျိုးအစားသိရင် ဝါကျထဲ ဘယ်နေရာမှာ ထားရမလဲ သိနိုင်တယ်။']],
+ [['The eight are: နာမ်၊ နာမ်စား၊ ကြိယာ၊ နာမဝိသေသန၊ ကြိယာဝိသေသန၊ ဝိဘတ်၊ သမ္ဗန္ဓ၊ အာမေဍိတ်။','၎င်း ၈ မျိုးက - နာမ်၊ နာမ်စား၊ ကြိယာ၊ နာမဝိသေသန၊ ကြိယာဝိသေသန၊ ဝိဘတ်၊ သမ္ဗန္ဓ၊ အာမေဍိတ်။']]],
+ table:{head:['Class','English','Example'],rows:[['နာမ်','noun','ကလေး၊ စာအုပ်'],['နာမ်စား','pronoun','ကျွန်တော်၊ သူ'],['ကြိယာ','verb','စား၊ သွား၊ ဖတ်'],['နာမဝိသေသန','adjective','လှသော၊ ကြီးသော'],['ကြိယာဝိသေသန','adverb','မြန်မြန်၊ ဖြည်းဖြည်း'],['ဝိဘတ်','particle','က၊ ကို၊ မှာ၊ နှင့်'],['သမ္ဗန္ဓ','conjunction','ပြီးတော့၊ ဒါပေမဲ့'],['အာမေဍိတ်','interjection','အမလေး၊ ဟာ']]},
+ examples:[['ကလေးက ပန်းသီးကို မြန်မြန်စားတယ်။ (noun, particle, noun, particle, adverb, verb)','ကလေးက ပန်းသီးကို မြန်မြန်စားတယ်။ (နာမ်၊ ဝိဘတ်၊ နာမ်၊ ဝိဘတ်၊ ကြိယာဝိသေသန၊ ကြိယာ)']],
+ quiz:[QM('"စား" က ဘာပုဒ်လဲ။',['နာမ်','ကြိယာ','ဝိဘတ်','သမ္ဗန္ဓ'],1),QM('"ကလေး" က ဘာပုဒ်လဲ။',['နာမ်','ကြိယာ','အာမေဍိတ်','ကြိယာဝိသေသန'],0),QM('"ကို" က ဘာပုဒ်လဲ။',['နာမ်စား','ဝိဘတ်','နာမဝိသေသန','ကြိယာ'],1),QM('ပုဒ်အမျိုးအစား စုစုပေါင်း ...',['၅','၆','၇','၈'],3)]}
+]},
+{id:'m3',title:['Nouns and Pronouns','နာမ်နှင့် နာမ်စား'],lessons:[
+{id:'m3-1',type:'grammar',title:['Nouns (နာမ်)','နာမ်'],
+ points:[
+ [['A noun (နာမ်) is a word that names a person, an animal, a place, a thing or an idea.','နာမ်ဆိုတာ လူ၊ တိရစ္ဆာန်၊ နေရာ၊ ပစ္စည်း၊ အယူအဆ တို့ကို ခေါ်တဲ့ ပုဒ်ပါ။']],
+ [['Proper nouns name one particular thing (အထူးနာမ်): မန္တလေး၊ ဧရာဝတီ. Common nouns name a whole kind (သာမညနာမ်): မြို့၊ မြစ်။','အထူးနာမ်က သီးသန့်တစ်ခုကို ခေါ်တယ်: မန္တလေး၊ ဧရာဝတီ။ သာမညနာမ်က အမျိုးအစားလိုက်ခေါ်တယ်: မြို့၊ မြစ်။']],
+ [['Abstract nouns name ideas: ချစ်ခြင်း၊ ဒုက္ခ၊ ပညာ. Often formed by adding ခြင်း or မှု to a verb: သွား → သွားခြင်း။','ခံစားမှုနဲ့ အယူအဆ နာမ်တွေ: ပညာ၊ ဒုက္ခ။ ကြိယာကို ခြင်း၊ မှု ထည့်ပြီး နာမ်ပြောင်းနိုင်တယ်: သွား → သွားခြင်း။']]],
+ table:{head:['Kind','Burmese','English'],rows:[['Person','ဆရာ၊ ကလေး','teacher, child'],['Animal','ခွေး၊ ဇီးကွက်','dog, owl'],['Place','မြို့၊ ကျောင်း','town, school'],['Thing','စာအုပ်၊ ခုံ','book, chair'],['Proper','ရန်ကုန်၊ ဧရာဝတီ','Yangon, Irrawaddy'],['Abstract','ပညာ၊ ချစ်ခြင်း','education, love']]},
+ examples:[['ဇီးကွက်သည် ညဘက်တွင် ပျံသန်းသည်။ (The owl flies at night.)','ဇီးကွက်သည် ညဘက်တွင် ပျံသန်းသည်။'],['ပညာသည် အလင်းရောင်ဖြစ်သည်။ (Knowledge is light.)','ပညာသည် အလင်းရောင်ဖြစ်သည်။']],
+ quiz:[QM('အောက်ပါတို့အနက် အထူးနာမ် (proper noun) က ...',['မြို့','မန္တလေး','ကျောင်း','မြစ်'],1),QM('"ပညာ" ဟာ ...',['လူနာမ်','တိရစ္ဆာန်နာမ်','ခံစားမှု/အယူအဆ နာမ်','ကြိယာ'],2),QM('"သွား" ကို နာမ်ပြောင်းရင် ...',['သွားသော','သွားခြင်း','သွားကာ','သွားလျက်'],1),QM('"ခွေး" က ဘာနာမ်လဲ။',['တိရစ္ဆာန်နာမ်','နေရာနာမ်','ကြိယာ','ဝိဘတ်'],0)]},
+{id:'m3-2',type:'grammar',title:['Pronouns (နာမ်စား)','နာမ်စား'],
+ points:[
+ [['A pronoun (နာမ်စား) stands in place of a noun. Burmese pronouns change by speaker’s gender, age and politeness.','နာမ်စားက နာမ်အစား သုံးတဲ့ ပုဒ်ပါ။ မြန်မာနာမ်စားတွေက ပြောသူရဲ့ ကျား/မ၊ အသက်၊ ယဉ်ကျေးမှုအလိုက် ပြောင်းလဲတယ်။']],
+ [['First person (ပထမပုဂ္ဂိုလ်) = the speaker: ကျွန်တော် (male), ကျွန်မ (female), ငါ (informal).','ပထမပုဂ္ဂိုလ် = ပြောသူ: ကျွန်တော် (ကျား)၊ ကျွန်မ (မ)၊ ငါ (ရင်းနှီး)။']],
+ [['Second person (ဒုတိယပုဂ္ဂိုလ်) = the listener: ခင်ဗျား, ရှင်, မင်း. Third person (တတိယပုဂ္ဂိုလ်) = someone else: သူ, သူမ, သူတို့။','ဒုတိယပုဂ္ဂိုလ် = ကြားသူ: ခင်ဗျား၊ ရှင်၊ မင်း။ တတိယပုဂ္ဂိုလ် = အခြားသူ: သူ၊ သူမ၊ သူတို့။']]],
+ table:{head:['Person','Burmese','English'],rows:[['1st','ကျွန်တော် / ကျွန်မ / ငါ','I'],['1st plural','ကျွန်တော်တို့ / ကျွန်မတို့ / ငါတို့','we'],['2nd','ခင်ဗျား / ရှင် / မင်း','you'],['2nd plural','ခင်ဗျားတို့ / မင်းတို့','you (pl.)'],['3rd','သူ / သူမ','he / she'],['3rd plural','သူတို့','they']]},
+ examples:[['ကျွန်တော် စာဖတ်နေတယ်။ (I am reading.)','ကျွန်တော် စာဖတ်နေတယ်။'],['သူတို့ ကျောင်းသွားကြတယ်။ (They go to school.)','သူတို့ ကျောင်းသွားကြတယ်။']],
+ quiz:[QM('ကျားလေးက ယဉ်ကျေးစွာ "ကျွန်တော်" ဟု ဆိုသည်။ ဒါဟာ ...',['ပထမပုဂ္ဂိုလ်','ဒုတိယပုဂ္ဂိုလ်','တတိယပုဂ္ဂိုလ်','အာမေဍိတ်'],0),QM('"မင်း" က ...',['ပထမပုဂ္ဂိုလ်','ဒုတိယပုဂ္ဂိုလ်','တတိယပုဂ္ဂိုလ်','ဝိဘတ်'],1),QM('"သူတို့" ရဲ့ အင်္ဂလိပ်လို ...',['we','you','they','I'],2),QM('"ကျွန်မ" ကို ဘယ်သူသုံးလဲ။',['အမျိုးသမီး','အမျိုးသား','လူတိုင်း','ကလေးသာ'],0)]}
+]},
+{id:'m4',title:['Verbs and Describing Words','ကြိယာနှင့် ဝိသေသန'],lessons:[
+{id:'m4-1',type:'grammar',title:['Verbs (ကြိယာ)','ကြိယာ'],
+ points:[
+ [['A verb (ကြိယာ) tells what someone does or what happens: စား၊ သွား၊ ဖတ်၊ အိပ်။','ကြိယာက တစ်ယောက်လုပ်တာ၊ ဖြစ်တာကို ပြောတဲ့ ပုဒ်ပါ: စား၊ သွား၊ ဖတ်၊ အိပ်။']],
+ [['Burmese verbs do not change form. Time and mood are shown by endings: တယ် (present/general), ခဲ့တယ် (past), မယ် (future), နေတယ် (continuous).','မြန်မာကြိယာက ပုံမပြောင်းဘူး။ အချိန်ကို နောက်ဆက်တွေနဲ့ ပြတယ်: တယ် (ပစ္စုပ္ပန်)၊ ခဲ့တယ် (အတိတ်)၊ မယ် (အနာဂတ်)၊ နေတယ် (ဆက်လက်)။']],
+ [['Negative: put မ before the verb and ဘူး after: မစားဘူး။','ငြင်းဆိုခြင်း: ကြိယာရှေ့ မ၊ နောက် ဘူး ထည့်: မစားဘူး။']]],
+ table:{head:['Meaning','Burmese','English'],rows:[['Present','စားတယ်','eat(s)'],['Past','စားခဲ့တယ်','ate'],['Future','စားမယ်','will eat'],['Continuous','စားနေတယ်','is eating'],['Negative','မစားဘူး','does not eat'],['Question','စားသလား','does (he) eat?']]},
+ examples:[['ကျွန်တော် မနေ့က ဆရာဆီ သွားခဲ့တယ်။ (I went to the teacher yesterday.)','ကျွန်တော် မနေ့က ဆရာဆီ သွားခဲ့တယ်။'],['မနက်ဖြန် မိုးရွာမယ်။ (It will rain tomorrow.)','မနက်ဖြန် မိုးရွာမယ်။']],
+ quiz:[QM('"စားခဲ့တယ်" က ဘယ်အချိန်လဲ။',['အတိတ်','ပစ္စုပ္ပန်','အနာဂတ်','ဆက်လက်'],0),QM('"သွားမယ်" က ...',['အတိတ်','အနာဂတ်','ငြင်းဆို','မေးခွန်း'],1),QM('"မ... ဘူး" ပုံစံက ဘာကို ပြလဲ။',['အတိတ်','အမိန့်','ငြင်းဆိုခြင်း','မေးခွန်း'],2),QM('"စာဖတ်နေတယ်" က ...',['ဆက်လက်ဖြစ်နေသည်','ပြီးသွားပြီ','မလုပ်ဘူး','လုပ်ဖို့စီစဉ်'],0)]},
+{id:'m4-2',type:'grammar',title:['Adjectives (နာမဝိသေသန)','နာမဝိသေသန'],
+ points:[
+ [['An adjective (နာမဝိသေသန) describes a noun. In Burmese it usually comes after the noun and is joined with the particle သော / တဲ့: လှသောပန်း / လှတဲ့ပန်း။','နာမဝိသေသနက နာမ်ကို ဖော်ပြတယ်။ မြန်မာမှာ နာမ်ရဲ့ရှေ့မှာ လာပြီး သော / တဲ့ နဲ့ ချိတ်ပါတယ်: လှတဲ့ပန်း။']],
+ [['Common groups: colour (အနီ၊ အစိမ်း), size (ကြီး၊ သေး), quality (ကောင်း၊ ဆိုး), number (နှစ်၊ သုံး).','အုပ်စုများ: အရောင်၊ အရွယ်၊ အရည်အသွေး၊ ဂဏန်း။']]],
+ table:{head:['Burmese','English'],rows:[['ကြီးသော အိမ်','a big house'],['သေးတဲ့ ခွေး','a small dog'],['လှသော ပန်း','a beautiful flower'],['အစိမ်းရောင် သစ်ရွက်','a green leaf'],['ဟောင်းတဲ့ နာရီ','an old clock']]},
+ examples:[['လှသောပန်းတစ်ပွင့် ပွင့်နေသည်။ (A beautiful flower is blooming.)','လှသောပန်းတစ်ပွင့် ပွင့်နေသည်။'],['ဟောင်းတဲ့ နာရီက အချိန်မှန်တယ်။ (The old clock keeps good time.)','ဟောင်းတဲ့ နာရီက အချိန်မှန်တယ်။']],
+ quiz:[QM('"ကြီးသောအိမ်" ထဲမှာ နာမဝိသေသနက ...',['အိမ်','ကြီး','သော','—'],1),QM('နာမဝိသေသနက ဘာကို ဖော်ပြလဲ။',['ကြိယာ','နာမ်','ဝိဘတ်','အာမေဍိတ်'],1),QM('"အစိမ်းရောင်" က ဘာအုပ်စုလဲ။',['အရွယ်','အရောင်','ဂဏန်း','အရသာ'],1),QM('"လှတဲ့ ပန်း" ထဲက "တဲ့" က ...',['ချိတ်ဆက်စကား','နာမ်','ကြိယာ','သမ္ဗန္ဓ'],0)]},
+{id:'m4-3',type:'grammar',title:['Adverbs (ကြိယာဝိသေသန)','ကြိယာဝိသေသန'],
+ points:[
+ [['An adverb (ကြိယာဝိသေသန) describes a verb: how, when or how often. It comes before the verb.','ကြိယာဝိသေသနက ကြိယာကို ဖော်ပြတယ်: ဘယ်လို၊ ဘယ်အချိန်၊ ဘယ်နှကြိမ်။ ကြိယာရှေ့မှာ လာတယ်။']],
+ [['Doubling an adjective often makes an adverb: မြန် → မြန်မြန်, ဖြည်း → ဖြည်းဖြည်း, ကောင်း → ကောင်းကောင်း.','နာမဝိသေသနကို နှစ်ခါထပ်ပြီး ကြိယာဝိသေသန လုပ်လို့ရတယ်: မြန် → မြန်မြန်၊ ကောင်း → ကောင်းကောင်း။']]],
+ table:{head:['Burmese','English','Kind'],rows:[['မြန်မြန်','quickly','manner'],['ဖြည်းဖြည်း','slowly','manner'],['အမြဲ','always','frequency'],['တစ်ခါတလေ','sometimes','frequency'],['ဒီနေ့','today','time']]},
+ examples:[['သူ မြန်မြန် ပြေးတယ်။ (He runs quickly.)','သူ မြန်မြန် ပြေးတယ်။'],['ဖြည်းဖြည်း ပြောပါ။ (Please speak slowly.)','ဖြည်းဖြည်း ပြောပါ။']],
+ quiz:[QM('"ဖြည်းဖြည်း" ရဲ့ အင်္ဂလိပ်ဘာသာ ...',['quickly','slowly','always','never'],1),QM('ကြိယာဝိသေသန ဘယ်မှာ လာလဲ။',['ကြိယာရှေ့','နာမ်ရှေ့','ဝါကျအဆုံးတွင်သာ','ကြိယာနောက်သာ'],0),QM('"အမြဲ" က ဘယ်အမျိုးအစားလဲ။',['အကြိမ်ရေ','အရောင်','နေရာ','ဂဏန်း'],0),QM('"မြန်" ကို နှစ်ခါထပ်ရင် ...',['မြန်မြန်','မြန်မြန်မြန်','မြန်မ','မြန်တယ်'],0)]}
+]},
+{id:'m5',title:['Particles, Conjunctions, Interjections','ဝိဘတ်၊ သမ္ဗန္ဓ၊ အာမေဍိတ်'],lessons:[
+{id:'m5-1',type:'grammar',title:['Particles (ဝိဘတ်)','ဝိဘတ်'],
+ points:[
+ [['A particle (ဝိဘတ်) is attached to a noun to show its role in the sentence. Burmese uses particles where English uses word order and prepositions.','ဝိဘတ်က နာမ်နောက်မှာ ကပ်ပြီး ဝါကျထဲက အခန်းကဏ္ဍကို ပြတယ်။ အင်္ဂလိပ်မှာ ဝါကျအစီအစဉ်နဲ့ preposition သုံးတဲ့နေရာမှာ မြန်မာက ဝိဘတ်သုံးတယ်။']],
+ [['က / သည် marks the subject; ကို marks the object; မှာ / တွင် = at / in; မှ = from; သို့ = to; နှင့် = with / and; ၏ = of.','က/သည် = ကတ္တား၊ ကို = ကံ၊ မှာ/တွင် = နေရာ၊ မှ = ကနေ၊ သို့ = ဆီသို့၊ နှင့် = နဲ့၊ ၏ = ရဲ့။']]],
+ table:{head:['Particle','Role','Example'],rows:[['က / သည်','subject','ကလေးက စားတယ်'],['ကို','object','ပန်းသီးကို စားတယ်'],['မှာ / တွင်','place','အိမ်မှာ နေတယ်'],['မှ','from','ရန်ကုန်မှ လာတယ်'],['သို့','to','မန္တလေးသို့ သွားတယ်'],['နှင့်','with','သူငယ်ချင်းနှင့် သွားတယ်'],['၏','of','ကျွန်တော်၏ စာအုပ်']]},
+ examples:[['ကျွန်တော်က စာအုပ်ကို ဖတ်တယ်။ (I read the book.)','ကျွန်တော်က စာအုပ်ကို ဖတ်တယ်။'],['သူသည် ရန်ကုန်မှ မန္တလေးသို့ သွားသည်။ (He goes from Yangon to Mandalay.)','သူသည် ရန်ကုန်မှ မန္တလေးသို့ သွားသည်။']],
+ quiz:[QM('ကံ (object) ကို ပြတဲ့ ဝိဘတ်က ...',['က','ကို','မှာ','၏'],1),QM('"အိမ်___ နေတယ်" (အိမ်မှာ) - ဘယ်ဟာ ဖြည့်ရမလဲ။',['ကို','မှာ','က','ရဲ့'],1),QM('"၏" ရဲ့ အဓိပ္ပာယ်က ...',['from','of','with','to'],1),QM('"မှ" က ...',['to','from','of','and'],1)]},
+{id:'m5-2',type:'grammar',title:['Conjunctions (သမ္ဗန္ဓ)','သမ္ဗန္ဓ'],
+ points:[
+ [['A conjunction (သမ္ဗန္ဓ) joins words, phrases or clauses. It shows the link between ideas.','သမ္ဗန္ဓက စကားလုံး၊ စကားစု၊ ဝါကျတွေကို ဆက်စပ်ပေးတယ်။']],
+ [['Addition: နှင့်၊ ပြီးတော့။ Contrast: ဒါပေမဲ့၊ သို့ရာတွင်။ Reason: ကြောင့်၊ ဒါကြောင့်။ Choice: သို့မဟုတ်။','ပေါင်းထည့်: နှင့်၊ ပြီးတော့။ ဆန့်ကျင်: ဒါပေမဲ့။ အကြောင်းအကျိုး: ကြောင့်၊ ဒါကြောင့်။ ရွေးချယ်: သို့မဟုတ်။']]],
+ table:{head:['Burmese','English','Use'],rows:[['နှင့် / နဲ့','and / with','addition'],['ပြီးတော့','and then','sequence'],['ဒါပေမဲ့ / သို့ရာတွင်','but / however','contrast'],['ကြောင့်','because','reason'],['ဒါကြောင့်','therefore','result'],['သို့မဟုတ်','or','choice']]},
+ examples:[['မိုးရွာတယ်၊ ဒါကြောင့် အိမ်မှာနေတယ်။ (It rained, so I stayed home.)','မိုးရွာတယ်၊ ဒါကြောင့် အိမ်မှာနေတယ်။'],['ကျွန်တော်သွားချင်တယ်၊ ဒါပေမဲ့ မအားဘူး။ (I want to go, but I am not free.)','ကျွန်တော်သွားချင်တယ်၊ ဒါပေမဲ့ မအားဘူး။']],
+ quiz:[QM('"ဒါပေမဲ့" ရဲ့ အဓိပ္ပာယ်က ...',['and','but','because','or'],1),QM('"သို့မဟုတ်" က ...',['ရွေးချယ်ခြင်း','အကြောင်းရင်း','ပေါင်းထည့်','အချိန်'],0),QM('"ဒါကြောင့်" က ...',['however','therefore','and','or'],1),QM('"ပြီးတော့" က ...',['ဆန့်ကျင်','အစီအစဉ်','မေးခွန်း','ငြင်းဆို'],1)]},
+{id:'m5-3',type:'grammar',title:['Interjections (အာမေဍိတ်)','အာမေဍိတ်'],
+ points:[
+ [['An interjection (အာမေဍိတ်) expresses sudden feeling. It stands apart from the sentence grammar.','အာမေဍိတ်က ရုတ်တရက် ခံစားချက်ကို ဖော်ပြတယ်။ ဝါကျသဒ္ဒါနဲ့ သီးခြားရပ်တည်တယ်။']],
+ [['Surprise: အလို၊ ဟယ်။ Pain / pity: အမလေး၊ အို။ Joy: ဩော်၊ ဟေး။ Calling: ဟေ့၊ ဟဲ့။','အံ့ဩ: အလို၊ ဟယ်။ နာကျင်/သနား: အမလေး၊ အို။ ဝမ်းသာ: ဩော်၊ ဟေး။ ခေါ်: ဟေ့၊ ဟဲ့။']]],
+ table:{head:['Burmese','Feeling'],rows:[['အလို','surprise'],['အမလေး','pain or alarm'],['ဟေး','joy'],['ဟေ့','calling'],['ဟာ','disappointment']]},
+ examples:[['အမလေး၊ မီးလောင်နေပြီ! (Oh no, it is on fire!)','အမလေး၊ မီးလောင်နေပြီ!'],['ဟေး၊ အောင်ပြီ! (Hooray, we passed!)','ဟေး၊ အောင်ပြီ!']],
+ quiz:[QM('အမလေး ဆိုတာ ...',['အာမေဍိတ်','နာမ်','ကြိယာ','ဝိဘတ်'],0),QM('"ဟေး" က ဘာခံစားချက်လဲ။',['ဝမ်းသာ','ကြောက်','နာကျင်','စိတ်ပျက်'],0),QM('အာမေဍိတ်က ...',['ဝါကျရဲ့ ကတ္တားသာ','သီးခြားရပ်တည်သည်','ကြိယာသာ','အမြဲနောက်ဆုံးလာသည်'],1),QM('ခေါ်တဲ့အခါ သုံးတာက ...',['ဟေ့','အမလေး','ဟေး','အလို'],0)]}
+]},
+{id:'m6',title:['Sentences','ဝါကျ'],lessons:[
+{id:'m6-1',type:'grammar',title:['Sentence structure','ဝါကျဖွဲ့စည်းပုံ'],
+ points:[
+ [['A sentence (ဝါကျ) has a subject (ကတ္တား), an object (ကံ) and a verb (ကြိယာ), in that order, and the verb comes last.','ဝါကျမှာ ကတ္တား၊ ကံ၊ ကြိယာ အစီအစဉ်အတိုင်း ပါပြီး ကြိယာက အဆုံးမှာ လာတယ်။']],
+ [['Order: Subject + Object + Verb (SOV). English is Subject + Verb + Object (SVO).','အစီအစဉ်: ကတ္တား + ကံ + ကြိယာ (SOV)။ အင်္ဂလိပ်က SVO ဖြစ်တယ်။']],
+ [['Time and place words usually come early in the sentence: မနေ့က အိမ်မှာ ထမင်းစားတယ်။','အချိန်၊ နေရာစကားလုံးတွေက ဝါကျအစပိုင်းမှာ လာတတ်တယ်: မနေ့က အိမ်မှာ ထမင်းစားတယ်။']]],
+ table:{head:['Subject','Object','Verb','English'],rows:[['ကောင်လေးက','ဘောလုံးကို','ကန်တယ်။','The boy kicks the ball.'],['အမေက','ထမင်းကို','ချက်တယ်။','Mother cooks rice.'],['ကျွန်တော်တို့က','စာကို','လေ့လာတယ်။','We study the lesson.']]},
+ examples:[['ကလေးက ပန်းသီးကို စားတယ်။ (The child eats the apple.)','ကလေးက ပန်းသီးကို စားတယ်။'],['ဆရာက ကျောင်းသားကို မေးတယ်။ (The teacher asks the student.)','ဆရာက ကျောင်းသားကို မေးတယ်။']],
+ quiz:[QM('မြန်မာဝါကျမှာ ကြိယာက ...',['အစ','အလယ်','အဆုံး','ဘယ်နေရာမဆို'],2),QM('မြန်မာ စကားစီစဉ်ပုံက ...',['SVO','SOV','VSO','OSV'],1),QM('"ကျွန်တော် ရေကို သောက်တယ်" မှာ ကံက ...',['ကျွန်တော်','ရေ','သောက်','တယ်'],1),QM('မှန်တဲ့ ဝါကျက ...',['စားတယ် ကလေးက ပန်းသီးကို','ကလေးက ပန်းသီးကို စားတယ်','ပန်းသီးကို စားတယ် ကလေးက','ကလေးက စားတယ် ပန်းသီးကို'],1)]},
+{id:'m6-2',type:'grammar',title:['Sentence endings and types','ဝါကျအဆုံးသတ်နှင့် အမျိုးအစား'],
+ points:[
+ [['Formal written Burmese ends sentences with သည် / ၏; spoken Burmese ends with တယ် / ပါတယ်.','စာပေပုံစံမှာ သည်၊ ၏ နဲ့ အဆုံးသတ်ပြီး စကားပြောပုံစံမှာ တယ်၊ ပါတယ် နဲ့ ဆုံးတယ်။']],
+ [['Statement: သွားတယ်။ Question: သွားသလား။ Command: သွားပါ။ Wish: သွားချင်တယ်။ Negative: မသွားဘူး။','ပြောဆိုချက်: သွားတယ်။ မေးခွန်း: သွားသလား။ အမိန့်: သွားပါ။ ဆန္ဒ: သွားချင်တယ်။ ငြင်းဆို: မသွားဘူး။']],
+ [['Adding ပါ makes a sentence polite: စားပါ (please eat), သွားပါတယ် (I go, politely).','ပါ ထည့်ရင် ယဉ်ကျေးတဲ့ပုံစံ ဖြစ်တယ်: စားပါ၊ သွားပါတယ်။']]],
+ table:{head:['Type','Spoken','Written'],rows:[['Statement','သွားတယ်။','သွားသည်။'],['Question','သွားသလား။','သွားသလော။'],['Command','သွားပါ။','သွားလော့။'],['Wish','သွားချင်တယ်။','သွားလိုသည်။'],['Negative','မသွားဘူး။','မသွားပါ။']]},
+ examples:[['မနက်ဖြန် ကျောင်းသွားမလား။ (Will you go to school tomorrow?)','မနက်ဖြန် ကျောင်းသွားမလား။'],['ကျေးဇူးပြုပြီး ထိုင်ပါ။ (Please sit down.)','ကျေးဇူးပြုပြီး ထိုင်ပါ။']],
+ quiz:[QM('စကားပြောပုံစံ အဆုံးသတ်က ...',['သည်','တယ်','၏','လော့'],1),QM('"စားသလား" က ဘာဝါကျလဲ။',['ပြောဆို','မေးခွန်း','အမိန့်','ဆန္ဒ'],1),QM('ယဉ်ကျေးအောင် ထည့်တာက ...',['ပါ','မ','ဘူး','နေ'],0),QM('"မသွားဘူး" က ...',['ငြင်းဆို','အမိန့်','မေးခွန်း','ဆန္ဒ'],0)]}
+]}
+]};
+
+(function(){
+'use strict';
+var COURSES=[window.COURSE_GRAMMAR,window.COURSE_VOCAB,window.COURSE_SENT,window.COURSE_MY];
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var REDUCED=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- storage (safe) ---------- */
+var mem={};
+function sGet(k,d){try{var v=localStorage.getItem('le.'+k);return v==null?(k in mem?mem[k]:d):JSON.parse(v)}catch(e){return k in mem?mem[k]:d}}
+function sSet(k,v){mem[k]=v;try{localStorage.setItem('le.'+k,JSON.stringify(v))}catch(e){}}
+
+var S={lang:sGet('lang','en'),tr:sGet('tr',true),size:sGet('size','m'),theme:sGet('theme','auto'),name:sGet('name',''),
+  prog:sGet('prog',{}),last:sGet('last',null),welcomed:sGet('welcomed',false)};
+
+/* ---------- indexes ---------- */
+var IDX={course:{},unit:{},lesson:{}};
+COURSES.forEach(function(c){IDX.course[c.id]=c;c.units.forEach(function(u,ui){u.course=c;u.n=ui+1;IDX.unit[u.id]=u;
+  u.lessons.forEach(function(l,li){l.unit=u;l.course=c;l.n=li+1;IDX.lesson[l.id]=l})})});
+function coursesFor(lang){return COURSES.filter(function(c){return c.lang===lang})}
+function allLessons(lang){var a=[];coursesFor(lang).forEach(function(c){c.units.forEach(function(u){u.lessons.forEach(function(l){a.push(l)})})});return a}
+function flatLessons(){var a=[];COURSES.forEach(function(c){c.units.forEach(function(u){u.lessons.forEach(function(l){a.push(l)})})});return a}
+function stat(id){return S.prog[id]||'todo'}
+function unitProg(u){var d=u.lessons.filter(function(l){return stat(l.id)==='done'}).length;return {d:d,t:u.lessons.length,p:Math.round(d/u.lessons.length*100)}}
+function courseProg(c){var d=0,t=0;c.units.forEach(function(u){var p=unitProg(u);d+=p.d;t+=p.t});return {d:d,t:t,p:t?Math.round(d/t*100):0}}
+function langProg(){var d=0,t=0;coursesFor(S.lang).forEach(function(c){var p=courseProg(c);d+=p.d;t+=p.t});return {d:d,t:t,p:t?Math.round(d/t*100):0}}
+
+/* ---------- helpers ---------- */
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function icon(n,cls){return '<svg class="i '+(cls||'')+'" aria-hidden="true"><use href="#i-'+n+'"/></svg>'}
+function isMy(c){return c.lang==='my'}
+/* pair = [English, Burmese]; returns main (language being learned) and sub (translation) */
+function pr(p,course){
+  if(isMy(course)){var m=p[0].match(/\(([^)]*)\)\s*$/);return {main:p[1],mainLang:'my',sub:m?m[1]:p[0],subLang:'en'}}
+  return {main:p[0],mainLang:'en',sub:p[1],subLang:'my'}
+}
+function tx(p,course,cls){var r=pr(p,course);return '<div class="main" lang="'+r.mainLang+'">'+esc(r.main)+'</div>'+(r.sub?'<div class="tr '+(cls||'')+'" lang="'+r.subLang+'">'+esc(r.sub)+'</div>':'')}
+function T(p,course){return isMy(course)?[p[1],p[0]]:[p[0],p[1]]} // [main, sub] for titles
+function lvlPill(c){var m={Beginner:['beg','Beginner · အခြေခံ'],Intermediate:['int','Intermediate · အလယ်အလတ်']};var x=m[c.level]||['beg',c.level];return '<span class="pill '+x[0]+'"><i></i>'+x[1]+'</span>'}
+function stPill(id){var s=stat(id);var t={todo:'To-do',doing:'In progress',done:'Done'}[s];return '<span class="pill '+s+'"><i></i>'+t+'</span>'}
+function typePill(l){var t={grammar:'Grammar',vocab:'Vocabulary',sent:'Sentences',letters:'Letters'}[l.type];return '<span class="pill type"><i></i>'+t+'</span>'}
+function toast(msg){var t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove('show')},2200)}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function speak(text,btn){try{var u=new SpeechSynthesisUtterance(text.replace(/___/g,'blank'));u.lang='en-US';u.rate=.88;speechSynthesis.cancel();
+  if(btn){btn.classList.add('on');u.onend=u.onerror=function(){btn.classList.remove('on')}}speechSynthesis.speak(u)}catch(e){toast('Audio is not available in this browser')}}
+function spk(text){return '<button type="button" class="spk" data-speak="'+esc(text)+'" aria-label="Listen: '+esc(text)+'">'+icon('sound')+'</button>'}
+
+/* ---------- animations ---------- */
+function animateHeight(el,open){
+  if(REDUCED){el.hidden=!open;return}
+  if(open){el.hidden=false;var h=el.scrollHeight;el.animate([{height:'0px',opacity:0},{height:h+'px',opacity:1}],{duration:320,easing:'cubic-bezier(.22,1,.36,1)'})}
+  else{var h2=el.scrollHeight;var a=el.animate([{height:h2+'px',opacity:1},{height:'0px',opacity:0}],{duration:260,easing:'cubic-bezier(.4,0,.2,1)'});a.onfinish=function(){el.hidden=true}}
+}
+document.addEventListener('pointerdown',function(e){var b=e.target.closest&&e.target.closest('.btn,.ibtn,.choice,.tok');if(!b||REDUCED)return;
+  var r=b.getBoundingClientRect(),d=Math.max(r.width,r.height),s=document.createElement('span');s.className='ripple';
+  s.style.cssText='width:'+d+'px;height:'+d+'px;left:'+(e.clientX-r.left-d/2)+'px;top:'+(e.clientY-r.top-d/2)+'px';
+  if(getComputedStyle(b).position==='static')b.style.position='relative';b.appendChild(s);setTimeout(function(){s.remove()},650)});
+
+/* ---------- shell: sidebar ---------- */
+var mobile=function(){return window.matchMedia('(max-width: 900px)').matches};
+function setSide(open){
+  document.body.classList.toggle('side-open',open&&mobile());
+  document.body.classList.toggle('side-closed',!open);
+  $('#menuBtn').setAttribute('aria-expanded',String(open));
+  sSet('side',open);
+}
+function sideIsOpen(){return mobile()?document.body.classList.contains('side-open'):!document.body.classList.contains('side-closed')}
+function initSide(){
+  if(mobile())document.body.classList.add('side-closed');
+  else if(sGet('side',true)===false)document.body.classList.add('side-closed');
+  $('#menuBtn').setAttribute('aria-expanded',String(!document.body.classList.contains('side-closed')));
+  $('#menuBtn').addEventListener('click',function(){
+    if(mobile()){var o=!document.body.classList.contains('side-open');document.body.classList.toggle('side-open',o);document.body.classList.toggle('side-closed',!o);$('#menuBtn').setAttribute('aria-expanded',String(o))}
+    else setSide(document.body.classList.contains('side-closed'))});
+  $('#scrim').addEventListener('click',function(){document.body.classList.remove('side-open');document.body.classList.add('side-closed')});
+  window.addEventListener('resize',function(){if(!mobile())document.body.classList.remove('side-open')});
+}
+function closeMobileSide(){if(mobile()){document.body.classList.remove('side-open');document.body.classList.add('side-closed');$('#menuBtn').setAttribute('aria-expanded','false')}}
+
+/* ---------- nav tree (3 levels) ---------- */
+var openSet={};
+function renderNav(route){
+  var h='<a class="l1" href="#home" '+(route.v==='home'?'aria-current="page"':'')+'><span class="ico">'+icon('home')+'</span>Home · ပင်မစာမျက်နှာ</a>';
+  coursesFor(S.lang).forEach(function(c){
+    var cid='c:'+c.id,isOpen=openSet[cid]!==undefined?openSet[cid]:(route.course===c.id);
+    var t=T(c.title,c);
+    h+='<div class="grp'+(isOpen?' open':'')+'" data-key="'+cid+'"><div style="display:flex;align-items:center;gap:2px"><a class="l1" style="flex:1" href="#c-'+c.id+'" '+(route.v==='course'&&route.course===c.id?'aria-current="page"':'')+'><span class="ico">'+icon(c.icon)+'</span><span lang="'+(isMy(c)?'my':'en')+'">'+esc(t[0])+'</span></a>'+
+      '<button type="button" class="row" style="width:38px;padding:.55rem" data-toggle="'+cid+'" aria-expanded="'+isOpen+'" aria-label="Expand '+esc(c.title[0])+'">'+icon('chev','chev')+'</button></div>'+
+      '<div class="sub" '+(isOpen?'':'hidden')+'>';
+    c.units.forEach(function(u){
+      var uid='u:'+u.id,uo=openSet[uid]!==undefined?openSet[uid]:(route.unit===u.id);var ut=T(u.title,c);var up=unitProg(u);
+      h+='<div class="grp'+(uo?' open':'')+'" data-key="'+uid+'"><div style="display:flex;align-items:center;gap:2px"><a class="l2" style="flex:1" href="#u-'+u.id+'" '+(route.v==='unit'&&route.unit===u.id?'aria-current="page"':'')+'><span lang="'+(isMy(c)?'my':'en')+'">'+u.n+'. '+esc(ut[0])+'</span></a>'+
+        '<button type="button" class="row" style="width:34px;padding:.5rem" data-toggle="'+uid+'" aria-expanded="'+uo+'" aria-label="Expand unit '+u.n+'">'+icon('chev','chev')+'</button></div>'+
+        '<div class="sub" '+(uo?'':'hidden')+'>';
+      u.lessons.forEach(function(l){var lt=T(l.title,c);
+        h+='<a class="l3" href="#l-'+l.id+'" '+(route.v==='lesson'&&route.lesson===l.id?'aria-current="page"':'')+'><i class="dot '+stat(l.id)+'"></i><span lang="'+(isMy(c)?'my':'en')+'">'+esc(lt[0])+'</span></a>'});
+      h+='</div></div>'});
+    h+='</div></div>'});
+  $('#nav').innerHTML=h;
+  var p=langProg();$('#footPct').textContent=p.p+'%';$('#footBar').style.width=p.p+'%';$('#footTxt').textContent=p.d+' / '+p.t;
+}
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-toggle]');
+  if(t){var key=t.getAttribute('data-toggle'),g=t.closest('.grp'),sub=g.querySelector(':scope > .sub'),open=!g.classList.contains('open');
+    g.classList.toggle('open',open);t.setAttribute('aria-expanded',String(open));openSet[key]=open;animateHeight(sub,open);return}
+  var sp=e.target.closest('[data-speak]');if(sp){speak(sp.getAttribute('data-speak'),sp);return}
+  if(e.target.closest('.nav a,[data-nav-close]'))closeMobileSide();
+});
+
+/* ---------- translation + language ---------- */
+function applyTr(){
+  document.body.classList.toggle('no-tr',!S.tr);
+  var sw=$('#trSwitch');sw.setAttribute('aria-checked',String(S.tr));
+  var my=S.lang==='my';
+  $('#trLabel').textContent=my?'Show English translation':'Show Burmese translation';
+  $('#trHint').textContent=my?'အင်္ဂလိပ်ဘာသာပြန်ကို '+(S.tr?'ပြနေသည်':'ဖျောက်ထားသည်'):'မြန်မာဘာသာပြန်ကို '+(S.tr?'ပြနေသည်':'ဖျောက်ထားသည်');
+}
+function applyLang(){
+  $('#langSeg').setAttribute('data-v',S.lang);
+  $$('#langSeg button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.lang===S.lang))});
+  document.documentElement.setAttribute('lang',S.lang==='my'?'my':'en');
+  applyTr();
+}
+function setLang(l,go){if(S.lang===l&&!go)return;S.lang=l;sSet('lang',l);applyLang();if(go!==false)location.hash='#home';else route()}
+$('#langSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setLang(b.dataset.lang)});
+$('#trSwitch').addEventListener('click',function(){S.tr=!S.tr;sSet('tr',S.tr);applyTr();toast(S.tr?'Translation on':'Translation hidden')});
+
+/* ---------- settings popover ---------- */
+function applyPrefs(){
+  document.documentElement.setAttribute('data-size',S.size);
+  if(S.theme==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',S.theme);
+  $$('#sizeOpts button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.size===S.size))});
+  $$('#themeOpts button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.theme===S.theme))});
+}
+var aaBtn=$('#aaBtn'),aaPop=$('#aaPop');
+function aaToggle(o){aaPop.classList.toggle('open',o);aaBtn.setAttribute('aria-expanded',String(o))}
+aaBtn.addEventListener('click',function(e){e.stopPropagation();aaToggle(!aaPop.classList.contains('open'))});
+document.addEventListener('click',function(e){if(!e.target.closest('#aaPop')&&!e.target.closest('#aaBtn'))aaToggle(false)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){aaToggle(false);if(mobile())closeMobileSide()}});
+aaPop.addEventListener('click',function(e){
+  var s=e.target.closest('#sizeOpts [data-size]');if(s){S.size=s.dataset.size;sSet('size',S.size);applyPrefs();return}
+  var t=e.target.closest('#themeOpts [data-theme]');if(t){S.theme=t.dataset.theme;sSet('theme',S.theme);applyPrefs();return}
+  if(e.target.closest('#welcomeBtn')){S.welcomed=false;sSet('welcomed',false);location.reload();return}
+  if(e.target.closest('#resetBtn')){S.prog={};sSet('prog',{});S.last=null;sSet('last',null);aaToggle(false);toast('Progress reset');route()}
+});
+
+/* ---------- routing ---------- */
+function parse(){
+  var h=(location.hash||'#home').slice(1),m;
+  if((m=h.match(/^l-(.+)$/))&&IDX.lesson[m[1]]){var l=IDX.lesson[m[1]];return {v:'lesson',lesson:l.id,unit:l.unit.id,course:l.course.id}}
+  if((m=h.match(/^u-(.+)$/))&&IDX.unit[m[1]]){var u=IDX.unit[m[1]];return {v:'unit',unit:u.id,course:u.course.id}}
+  if((m=h.match(/^c-(.+)$/))&&IDX.course[m[1]])return {v:'course',course:m[1]};
+  return {v:'home'}
+}
+var first=true;
+function route(){
+  var r=parse();
+  if(r.course&&IDX.course[r.course].lang!==S.lang){S.lang=IDX.course[r.course].lang;sSet('lang',S.lang);applyLang()}
+  renderNav(r);renderCrumbs(r);
+  var page=$('#page'),build=function(){
+    page.innerHTML=({home:vHome,course:vCourse,unit:vUnit,lesson:vLesson})[r.v](r);
+    page.scrollTop=0;window.scrollTo(0,0);wire(r);
+    if(!first&&!REDUCED)page.animate([{opacity:0,transform:'translateY(16px)'},{opacity:1,transform:'none'}],{duration:380,easing:'cubic-bezier(.22,1,.36,1)'});
+    first=false};
+  if(!first&&!REDUCED){var o=page.animate([{opacity:1},{opacity:0}],{duration:110});o.onfinish=build}else build();
+  document.title='Learning English'
+}
+window.addEventListener('hashchange',route);
+
+function renderCrumbs(r){
+  var h='<a href="#home">Home</a>';
+  if(r.course){var c=IDX.course[r.course];h+='<span class="sep">/</span>'+(r.v==='course'?'<span aria-current="page" lang="'+(isMy(c)?'my':'en')+'">'+esc(T(c.title,c)[0])+'</span>':'<a href="#c-'+c.id+'" lang="'+(isMy(c)?'my':'en')+'">'+esc(T(c.title,c)[0])+'</a>');
+    if(r.unit){var u=IDX.unit[r.unit];h+='<span class="sep">/</span>'+(r.v==='unit'?'<span aria-current="page" lang="'+(isMy(c)?'my':'en')+'">'+esc(T(u.title,c)[0])+'</span>':'<a href="#u-'+u.id+'" lang="'+(isMy(c)?'my':'en')+'">'+esc(T(u.title,c)[0])+'</a>');
+      if(r.lesson){var l=IDX.lesson[r.lesson];h+='<span class="sep">/</span><span aria-current="page" lang="'+(isMy(c)?'my':'en')+'">'+esc(T(l.title,c)[0])+'</span>'}}}
+  $('#crumbs').innerHTML=h;
+}
+
+/* ---------- views ---------- */
+function vHome(){
+  var p=langProg(),my=S.lang==='my',nm=S.name?esc(S.name):'';
+  var all=allLessons(S.lang),last=S.last&&IDX.lesson[S.last]&&IDX.lesson[S.last].course.lang===S.lang?IDX.lesson[S.last]:null;
+  var next=last&&stat(last.id)!=='done'?last:all.filter(function(l){return stat(l.id)!=='done'})[0]||all[0];
+  var doing=all.filter(function(l){return stat(l.id)==='doing'}).length;
+  var h='<section><div class="hero"><div class="hero-main"><div class="eyebrow">'+(my?'Myanmar Grammar · မြန်မာသဒ္ဒါ':'English for Myanmar learners · အင်္ဂလိပ်စာ')+'</div>'+
+    '<h1 class="h1" style="margin-bottom:0">'+(nm?(my?'မင်္ဂလာပါ '+nm:'Hello, '+nm):(my?'မြန်မာစာ လေ့လာကြစို့':'Let’s learn English'))+'</h1>'+
+    '<p class="lede">'+(my?'အက္ခရာကနေ ဝါကျအထိ အဆင့်ဆင့် လေ့လာပါ။ တစ်ကြိမ်မှာ သင်ခန်းစာတစ်ခုချင်း၊ ရှင်းရှင်းလေးနဲ့။':'Three clear steps: choose a course, open a unit, then study one short lesson at a time. Turn the Burmese translation on or off whenever you like.')+'</p>'+
+    '<div class="btnrow"><a class="btn primary" href="#l-'+next.id+'">'+(last&&stat(last.id)!=='done'?'Continue learning':'Start first lesson')+icon('arrow')+'</a>'+
+    '<a class="btn ghost" href="#c-'+coursesFor(S.lang)[0].id+'">Browse courses</a></div>'+
+    '<svg class="hero-owl" aria-hidden="true"><use href="#owl"/></svg></div>'+
+    '<div class="glass stat"><div class="ring" style="--p:'+p.p+'"><div>'+p.p+'%</div></div><dl><dt>Lessons done</dt><dd>'+p.d+' / '+p.t+'</dd><dt>In progress</dt><dd>'+doing+'</dd><dt>Courses</dt><dd>'+coursesFor(S.lang).length+'</dd></dl></div></div></section>';
+  h+='<section><div class="section-h"><h2>Courses · သင်ရိုးများ</h2></div><div class="grid stagger">';
+  coursesFor(S.lang).forEach(function(c,i){var cp=courseProg(c),t=T(c.title,c),d=T(c.desc,c),lc=c.units.reduce(function(a,u){return a+u.lessons.length},0);
+    h+='<a class="glass card" style="--i:'+i+'" href="#c-'+c.id+'"><span class="ico">'+icon(c.icon)+'</span>'+icon('arrow','go')+'<div>'+lvlPill(c)+'</div>'+
+      '<h3 lang="'+(isMy(c)?'my':'en')+'">'+esc(t[0])+'</h3><p class="sub" lang="'+(isMy(c)?'en':'en')+'">'+esc(isMy(c)?d[0]:d[0])+'</p><p class="tr" lang="my" style="margin:0">'+esc(isMy(c)?'':d[1])+'</p>'+
+      '<div class="meta"><span>'+c.units.length+' units · '+lc+' lessons</span><span style="margin-left:auto;font-weight:800">'+cp.p+'%</span></div><div class="bar"><i style="width:'+cp.p+'%"></i></div></a>'});
+  h+='</div></section>';
+  h+='<section><div class="section-h"><h2>How it works · အဆင့် ၃ ဆင့်</h2></div><div class="levels">'+
+    '<div class="glass lv"><b class="n">1</b><div><h3>Course</h3><p>Pick a course from the sidebar or the cards above. · သင်ရိုးရွေးပါ။</p></div></div>'+
+    '<div class="glass lv"><b class="n">2</b><div><h3>Unit</h3><p>Each course is split into short themed units. · ယူနစ်ကို ရွေးပါ။</p></div></div>'+
+    '<div class="glass lv"><b class="n">3</b><div><h3>Lesson</h3><p>Read, listen, then check yourself with a quiz. · သင်ခန်းစာဖတ်ပြီး စမ်းသပ်ပါ။</p></div></div></div></section>';
+  return h;
+}
+function head(eyebrow,pair,course,extra){var t=T(pair,course);
+  return '<div class="lhead"><div class="eyebrow">'+eyebrow+'</div><h1 class="h1" lang="'+(isMy(course)?'my':'en')+'">'+esc(t[0])+'</h1><div class="h1-tr tr" lang="'+(isMy(course)?'en':'my')+'">'+esc(t[1])+'</div>'+(extra||'')+'</div>'}
+function vCourse(r){var c=IDX.course[r.course],d=T(c.desc,c),cp=courseProg(c);
+  var h='<section>'+head('Course',c.title,c,'<div class="tags">'+lvlPill(c)+'<span class="pill type"><i></i>'+c.units.length+' units</span><span class="pill done"><i></i>'+cp.p+'% complete</span></div><p class="lede" lang="'+(isMy(c)?'my':'en')+'">'+esc(d[0])+'</p><p class="tr" lang="'+(isMy(c)?'en':'my')+'">'+esc(d[1])+'</p>')+
+    '<div class="grid stagger">';
+  c.units.forEach(function(u,i){var up=unitProg(u),t=T(u.title,c);
+    h+='<a class="glass card" style="--i:'+i+'" href="#u-'+u.id+'">'+icon('arrow','go')+'<div class="eyebrow" style="margin:0">Unit '+u.n+'</div><h3 lang="'+(isMy(c)?'my':'en')+'">'+esc(t[0])+'</h3><p class="sub tr" lang="'+(isMy(c)?'en':'my')+'" style="margin:0">'+esc(t[1])+'</p>'+
+      '<div class="meta"><span>'+u.lessons.length+' lessons</span><span style="margin-left:auto;font-weight:800">'+up.d+' / '+up.t+'</span></div><div class="bar"><i style="width:'+up.p+'%"></i></div></a>'});
+  return h+'</div></section>'}
+function vUnit(r){var u=IDX.unit[r.unit],c=u.course;
+  var h='<section>'+head('Unit '+u.n+' · '+esc(c.title[0]),u.title,c)+'<div class="rows stagger">';
+  u.lessons.forEach(function(l,i){var t=T(l.title,c);
+    h+='<a class="glass lrow" style="--i:'+i+'" href="#l-'+l.id+'"><span class="no">'+l.n+'</span><div class="tx"><h3 lang="'+(isMy(c)?'my':'en')+'">'+esc(t[0])+'</h3><p class="tr" lang="'+(isMy(c)?'en':'my')+'" style="margin:0">'+esc(t[1])+'</p></div><div class="end">'+typePill(l)+stPill(l.id)+icon('chev')+'</div></a>'});
+  return h+'</div><div class="pager"><a class="btn ghost" href="#c-'+c.id+'">'+icon('back')+' Back to course</a></div></section>'}
+
+function vLesson(r){
+  var l=IDX.lesson[r.lesson],c=l.course;
+  if(stat(l.id)==='todo'){S.prog[l.id]='doing';sSet('prog',S.prog)}
+  S.last=l.id;sSet('last',l.id);
+  var h='<section>'+head('Lesson '+l.n+' · Unit '+l.unit.n,l.title,c,'<div class="tags">'+typePill(l)+'<span id="stSlot">'+stPill(l.id)+'</span></div>');
+  if(l.type==='grammar')h+=bGrammar(l,c);
+  else if(l.type==='vocab')h+=bVocab(l,c);
+  else if(l.type==='sent')h+=bSent(l,c);
+  else if(l.type==='letters')h+=bLetters(l,c);
+  h+='<div class="quiz" id="quizBox"></div>';
+  var all=flatLessons().filter(function(x){return x.course.id===c.id}),i=all.indexOf(l),pv=all[i-1],nx=all[i+1];
+  h+='<div class="pager">'+(pv?'<a class="btn ghost" href="#l-'+pv.id+'">'+icon('back')+' Previous</a>':'<a class="btn ghost" href="#u-'+l.unit.id+'">'+icon('back')+' Unit</a>')+
+    '<button type="button" class="btn ghost" id="doneBtn">'+icon('check')+' Mark as complete</button>'+
+    (nx?'<a class="btn primary" href="#l-'+nx.id+'">Next lesson '+icon('arrow')+'</a>':'<a class="btn primary" href="#c-'+c.id+'">Finish course '+icon('arrow')+'</a>')+'</div></section>';
+  return h}
+
+function bGrammar(l,c){
+  var h='<div class="stagger">';
+  l.points.forEach(function(p,i){h+='<div class="glass point" style="--i:'+i+'"><span class="k">'+(i+1)+'</span><div>'+tx(p[0],c)+'</div></div>'});
+  h+='</div>';
+  if(l.table){var trCol=l.table.head.map(function(x){return (isMy(c)?x==='English':x==='မြန်မာ')});
+    h+='<div class="block glass"><h3>'+icon('book')+'Quick reference</h3><div class="tablewrap"><table><thead><tr>'+l.table.head.map(function(x,i){return '<th'+(trCol[i]?' class="tr"':'')+'>'+esc(x)+'</th>'}).join('')+'</tr></thead><tbody>'+
+      l.table.rows.map(function(r){return '<tr>'+r.map(function(x,i){return '<td'+(trCol[i]?' class="tr"':'')+(/[က-႟]/.test(x)?' lang="my"':'')+'>'+esc(x)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div></div>'}
+  if(l.examples){h+='<div class="block glass"><h3>'+icon('chat')+'Examples</h3>';
+    l.examples.forEach(function(e){var r=pr(e,c);h+='<div class="ex">'+(!isMy(c)?spk(e[0]):'')+'<div style="flex:1;min-width:0">'+tx(e,c)+'</div></div>'});h+='</div>'}
+  return h}
+
+function bVocab(l,c){
+  var h='<div class="words stagger">';
+  l.words.forEach(function(w,i){h+='<article class="glass word" style="--i:'+i+'"><div class="top"><h3 lang="en">'+esc(w.w)+'</h3>'+spk(w.w)+'</div><div class="pos">'+esc(w.p)+'</div>'+
+    '<p class="mm tr" lang="my">'+esc(w.m)+'</p><p class="def">'+esc(w.d)+'</p><div class="eg"><div lang="en">'+esc(w.e)+' '+spk(w.e).replace('class="spk"','class="spk" style="width:30px;height:30px;vertical-align:middle;display:inline-grid"')+'</div><div class="tr" lang="my">'+esc(w.em)+'</div></div></article>'});
+  return h+'</div>'}
+
+function bSent(l,c){
+  var h='<div class="stagger">';
+  l.items.forEach(function(s,i){h+='<div class="glass sent" style="--i:'+i+'"><span class="no">'+(i+1)+'</span><div class="main-wrap" style="flex:1;min-width:0"><div class="main" lang="en">'+esc(s[0])+'</div><div class="tr" lang="my">'+esc(s[1])+'</div><button type="button" class="peek" data-peek>Show Burmese</button></div>'+spk(s[0])+'</div>'});
+  h+='</div><div class="scr glass" id="scr"></div>';
+  return h}
+
+function bLetters(l,c){
+  var h='<div class="point glass"><span class="k">i</span><div>'+tx(l.intro[0],c)+'</div></div>';
+  h+='<div class="glass detail" id="ldetail"><div class="big" lang="my">က</div><div><b>ka</b><p>Tap any letter to see its sound. · စာလုံးတစ်လုံးကို နှိပ်ပါ။</p></div></div><div class="groups">';
+  l.groups.forEach(function(g){h+='<div class="lgroup"><h4 lang="my">'+g.n+'</h4><div class="tiles">'+g.l.map(function(x){return '<button type="button" class="tile" data-letter="'+x[0]+'" data-sound="'+x[1]+'" data-grp="'+g.n+'" aria-pressed="false" lang="my">'+x[0]+'</button>'}).join('')+'</div></div>'});
+  return h+'</div>'}
+
+/* ---------- quiz ---------- */
+function makeVocabQuiz(l){
+  var pool=[];COURSES.forEach(function(c){if(c.id==='vocab')c.units.forEach(function(u){u.lessons.forEach(function(x){x.words.forEach(function(w){pool.push(w)})})})});
+  return l.words.map(function(w,i){
+    var others=shuffle(pool.filter(function(x){return x.w!==w.w}));
+    if(i%2===0){var o=[w.m].concat(others.slice(0,3).map(function(x){return x.m}));var s=shuffle(o);
+      return {q:'What does “'+w.w+'” mean?',o:s,a:s.indexOf(w.m),w:['“'+w.w+'” = '+w.d+'.','“'+w.w+'” = '+w.m],lang:{o:'my'}}}
+    var o2=[w.w].concat(others.slice(0,3).map(function(x){return x.w}));var s2=shuffle(o2);
+    return {q:'Which word fits? “'+w.d+'”',o:s2,a:s2.indexOf(w.w),w:['Example: '+w.e,w.em]}})}
+function renderQuiz(qs,l,c){
+  var box=$('#quizBox');if(!box||!qs.length)return;
+  var done=0,right=0;
+  var h='<h2>'+icon('q')+'Check yourself · စမ်းသပ်ပါ</h2>';
+  qs.forEach(function(q,i){var qLang=isMy(c)?'my':'en';
+    h+='<div class="glass q" data-i="'+i+'"><div class="qt"><span class="n">'+(i+1)+'.</span><span lang="'+(/[က-႟]/.test(q.q)?'my':'en')+'">'+esc(q.q)+'</span></div><div class="choices">'+
+      q.o.map(function(o,j){return '<button type="button" class="choice" data-j="'+j+'" lang="'+(/[က-႟]/.test(o)?'my':'en')+'">'+esc(o)+'</button>'}).join('')+'</div></div>'});
+  h+='<div id="scoreSlot"></div>';
+  box.innerHTML=h;
+  box.onclick=function(e){var b=e.target.closest('.choice');if(!b||b.disabled)return;
+    var qe=b.closest('.q'),q=qs[+qe.dataset.i],j=+b.dataset.j;
+    $$('.choice',qe).forEach(function(x,k){x.disabled=true;if(k===q.a)x.classList.add('right')});
+    if(j===q.a)right++;else b.classList.add('wrong');
+    if(q.w){var wp=q.w;var d=document.createElement('div');d.className='why';
+      var pp=isMy(c)?[wp[1],wp[0]]:wp;d.innerHTML='<span lang="'+(isMy(c)?'my':'en')+'">'+esc(pp[0])+'</span>'+(pp[1]?'<div class="tr" lang="'+(isMy(c)?'en':'my')+'">'+esc(pp[1])+'</div>':'');qe.appendChild(d)}
+    done++;
+    if(done===qs.length){var pct=Math.round(right/qs.length*100);
+      $('#scoreSlot').innerHTML='<div class="glass score"><b>'+right+' / '+qs.length+'</b><div style="flex:1;min-width:180px"><strong>'+(pct>=75?'Excellent work!':pct>=50?'Good effort.':'Keep practising.')+'</strong><div class="tr" style="margin:0" lang="my">'+(pct>=75?'အလွန်ကောင်းပါတယ်!':pct>=50?'ကောင်းပါတယ်၊ ဆက်ကြိုးစားပါ။':'ထပ်လေ့ကျင့်ကြည့်ပါ။')+'</div></div><button type="button" class="btn ghost" id="retry">Try again</button></div>';
+      if(pct>=75)markDone(l,true);$('#retry').onclick=function(){var nq=l.type==='vocab'?makeVocabQuiz(l):qs;renderQuiz(nq,l,c)};
+      $('#scoreSlot').scrollIntoView({behavior:REDUCED?'auto':'smooth',block:'center'})}}}
+
+function markDone(l,auto){
+  if(stat(l.id)==='done')return;S.prog[l.id]='done';sSet('prog',S.prog);
+  var s=$('#stSlot');if(s)s.innerHTML=stPill(l.id);
+  renderNav(parse());toast(auto?'Lesson complete! 🎉':'Marked as complete');}
+
+/* ---------- scramble practice ---------- */
+function initScramble(l){
+  var box=$('#scr');if(!box)return;
+  var picks=shuffle(l.items).slice(0,3),idx=0;
+  function show(){
+    var s=picks[idx],words=s[0].replace(/[.?!]$/,'').split(' '),punct=(s[0].match(/[.?!]$/)||[''])[0];
+    var bank=shuffle(words.map(function(w,i){return {w:w,i:i}})),placed=[];
+    box.innerHTML='<h3 style="font-family:var(--f-display);font-size:var(--t-md)">'+icon('chat')+' Build the sentence ('+(idx+1)+'/'+picks.length+')</h3><p class="tr" lang="my" style="margin-top:.3rem">'+esc(s[1])+'</p>'+
+      '<div class="tgt" id="tgt" aria-live="polite"></div><div class="bank" id="bank"></div><div class="btnrow" style="margin-top:1rem"><button type="button" class="btn primary" id="chk">Check</button><button type="button" class="btn ghost" id="rst">Reset</button></div><p id="fb" style="margin-top:.8rem;font-weight:700"></p>';
+    var tgt=$('#tgt',box),bk=$('#bank',box),fb=$('#fb',box);
+    function draw(){tgt.innerHTML='';bk.innerHTML='';
+      placed.forEach(function(t,k){var b=document.createElement('button');b.type='button';b.className='tok';b.textContent=t.w;b.onclick=function(){placed.splice(k,1);bank.push(t);draw()};tgt.appendChild(b)});
+      bank.forEach(function(t,k){var b=document.createElement('button');b.type='button';b.className='tok';b.textContent=t.w;b.onclick=function(){bank.splice(k,1);placed.push(t);draw()};bk.appendChild(b)})}
+    draw();
+    $('#rst',box).onclick=function(){bank=shuffle(words.map(function(w,i){return {w:w,i:i}}));placed=[];tgt.className='tgt';fb.textContent='';draw()};
+    $('#chk',box).onclick=function(){var ans=placed.map(function(t){return t.w}).join(' ')+punct;
+      if(ans===s[0]){tgt.className='tgt ok';fb.style.color='var(--good)';fb.textContent='Correct!';
+        if(idx<picks.length-1){setTimeout(function(){idx++;show()},900)}else{setTimeout(function(){box.innerHTML='<h3 style="font-family:var(--f-display)">Great job!</h3><p class="tr" style="margin:.4rem 0 1rem">You built all '+picks.length+' sentences.</p><button type="button" class="btn primary" id="again">Practise again</button>';
+          $('#again',box).onclick=function(){initScramble(l)};markDone(l,true)},900)}}
+      else{tgt.className='tgt bad';fb.style.color='var(--bad)';fb.textContent='Not yet. Tap a word to move it back, then try again.';setTimeout(function(){tgt.classList.remove('bad')},450)}};
+    var bank2=bank;
+  }
+  show()}
+
+function wire(r){
+  if(r.v!=='lesson')return;
+  var l=IDX.lesson[r.lesson],c=l.course;
+  $('#doneBtn').onclick=function(){markDone(l,false)};
+  if(l.type==='grammar'||l.type==='letters')renderQuiz(l.quiz,l,c);
+  else if(l.type==='vocab')renderQuiz(makeVocabQuiz(l),l,c);
+  else if(l.type==='sent')initScramble(l);
+  if(l.type==='letters'){var det=$('#ldetail');
+    $$('.tile').forEach(function(t){t.onclick=function(){$$('.tile').forEach(function(x){x.setAttribute('aria-pressed','false')});t.setAttribute('aria-pressed','true');
+      det.innerHTML='<div class="big" lang="my">'+t.dataset.letter+'</div><div><b>'+t.dataset.sound+'</b><p><span lang="my">'+t.dataset.grp+'</span> · '+(t.dataset.letter)+'</p></div>';
+      if(!REDUCED)det.animate([{transform:'scale(.97)'},{transform:'scale(1)'}],{duration:260,easing:'cubic-bezier(.34,1.56,.64,1)'})}})}
+  $$('[data-peek]').forEach(function(b){b.onclick=function(){var t=b.parentNode.querySelector('.tr');t.style.setProperty('display','block','important');b.setAttribute('aria-expanded','true')}});
+}
+
+/* ---------- welcome ---------- */
+function initWelcome(){
+  var w=$('#welcome');
+  function close(){w.classList.add('out');w.setAttribute('aria-hidden','true');S.welcomed=true;sSet('welcomed',true);setTimeout(function(){w.hidden=true},700);route()}
+  if(S.welcomed){w.hidden=true;return false}
+  var wl=S.lang;
+  $$('#wLang button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.lang===wl));b.onclick=function(){wl=b.dataset.lang;$$('#wLang button').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))})}});
+  $('#wForm').addEventListener('submit',function(e){e.preventDefault();var n=$('#wName').value.trim();S.name=n;sSet('name',n);S.lang=wl;sSet('lang',wl);applyLang();close()});
+  $('#wSkip').onclick=function(){S.lang=wl;sSet('lang',wl);applyLang();close()};
+  return true;
+}
+
+/* ---------- boot ---------- */
+applyPrefs();applyLang();initSide();
+var waiting=initWelcome();
+route();
+})();
+
+</script>
+</body>
+</html>
